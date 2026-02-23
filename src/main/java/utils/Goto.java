@@ -83,14 +83,12 @@ public class Goto {
     
 
     private static void music(String musicPath){
-        if(mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
+            mediaPlayer.dispose();
         }
-        Media media = new Media(musicPath);
-        mediaPlayer = new MediaPlayer(media);
 
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();setMediaPlayer(musicPath);
+        mediaPlayer = new MediaPlayer(new Media(musicPath));
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }
