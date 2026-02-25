@@ -48,10 +48,13 @@ public class Goto {
     private static int answerStreak = 0;
 
     private static Boolean hintClick = false;
+
+    public static DigitalTimer gameTimer = new DigitalTimer();
     
     private static double windowWidth ;
     
     private static double windowHeight ;
+
 
     public static void initializeWindowSize(RootPane root) {
     	rootPane = root;
@@ -296,26 +299,21 @@ public class Goto {
 
         rootPane.getChildren().add(hBox);
 
-        Label score = new Label("Your Score : " + yourScore);
-        score.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
-        score.setTextFill(Color.WHITE);
-        score.setAlignment(Pos.CENTER);
-        rootPane.getChildren().add(score);
+        gameTimer.setAlignment(Pos.TOP_CENTER);
+        rootPane.getChildren().add(gameTimer);
+        gameTimer.start(30);
 
         QuizPane quizPane = new QuizPane(questions.getFirst());
         VBox.setVgrow(quizPane, Priority.ALWAYS);
         rootPane.getChildren().add(quizPane);
 
         TextPane textPane = new TextPane(difficultyLevel);
-        textPane.setAlignment(Pos.CENTER);
+        rootPane.getChildren().add(textPane);
+        VBox.setMargin(textPane, new Insets(0, 0, 40, 0));
 
-        if (questions.getFirst().getChoiceType() == ChoiceType.CHOICE) {
-            rootPane.getChildren().add(new ChoicePane(new ArrayList<>(), difficultyLevel));
-        } else {
-            rootPane.getChildren().add(textPane);
-        }
-
-        VBox.setMargin(textPane, new Insets(20, 0, 50, 0));
+        gameTimer.setOnTimeOut(() -> {
+            System.out.println("Time's up!");
+        });
     }
 
 
