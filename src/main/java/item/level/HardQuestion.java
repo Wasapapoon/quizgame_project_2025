@@ -3,77 +3,59 @@ package item.level;
 import item.base.BaseQuestion;
 import item.usage.ChoiceType;
 import item.usage.hasHint;
+import item.usage.hasPicture;
 
-public class HardQuestion extends BaseQuestion implements hasHint {
+import java.util.List;
 
-    private String question;
+public class HardQuestion extends BaseQuestion implements hasPicture, hasHint {
 
-    private String answer;
-    
+    private final List<String> pictureNames;
     private String hint;
-    
-    private final Boolean hasHint = true;
-    
-    private Boolean useHint = false;
+    private boolean useHint = false;
 
-    private final int SCORE = 20;
-
-    public HardQuestion(ChoiceType type, String question, String answer, String hint) {
-        super(type, question,answer);
-        this.setHint(hint);
-    }
-
-    public String getQuestion() {
-        return question;
+    public HardQuestion(ChoiceType type, String answer, List<String> pictureNames, String hint) {
+        super(type, answer);
+        this.pictureNames = pictureNames;
+        this.hint = hint;
     }
 
     @Override
-    public String getAnswer(){
-        return answer;
+    public boolean getHasPicture() {
+        return true;
     }
 
     @Override
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setPictureName(String pictureName) {
+
     }
 
     @Override
-    public int getScore(){
-        return SCORE;
+    public List<String> getPictureNames() {
+        return pictureNames;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-    
     @Override
-	public void setHint(String hint) {
-		this.hint = hint ;
-		
-	}
+    public String getHint() {
+        return hint;
+    }
 
-	@Override
-	public String getHint() {
-		
-		return hint;
-	}
+    @Override
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
 
-	@Override
-	public boolean getHasHint() {
-		
-		return hasHint;
-	}
+    @Override
+    public boolean getHasHint() {
+        return true;
+    }
 
-	@Override
-	public boolean useHint() {
-		
-		return useHint;
-	}
+    @Override
+    public boolean useHint() {
+        return useHint;
+    }
 
-	@Override
-	public void setUseHint(boolean useHint) {
-		this.useHint = useHint;
-		
-	}
-
+    @Override
+    public void setUseHint(boolean useHint) {
+        this.useHint = useHint;
+    }
 }

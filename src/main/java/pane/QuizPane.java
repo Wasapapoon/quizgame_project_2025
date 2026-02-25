@@ -2,73 +2,54 @@ package pane;
 
 import item.base.BaseQuestion;
 import item.usage.hasPicture;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import utils.Goto;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class QuizPane extends GridPane {
-	
-	
-    public QuizPane(BaseQuestion question){
-    	Goto.initializeWindowSize(Goto.getRootPane());
-        setPadding(new Insets(32,0,32,0));
-        Text questionText = new Text(question.getQuestion());
-        if(questionText.getText().length() < 50) {
-        	 questionText.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
-        }
-        else {
-        	questionText.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 32));
-        }
-       
-        questionText.setFill(Color.WHITE);
-        setAlignment(Pos.CENTER);
-        boolean line = Pattern.compile("\n").matcher(question.getQuestion()).find();
-        
 
-        if(question instanceof hasPicture) {
-        	if(((hasPicture) question).getHasPicture()){
-                ImageView quizImg = new ImageView(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/" + ((hasPicture) question).getPictureName()))));
-                quizImg.setPreserveRatio(true);
-                quizImg.setFitWidth(550);
-                GridPane.setMargin(quizImg, new Insets(30, 0, 0, 0));
-                questionText.setTranslateY(265);
-                GridPane.setHalignment(quizImg, HPos.CENTER);
-                GridPane.setHalignment(questionText, HPos.CENTER);
-                getChildren().add(questionText);
-                getChildren().add(quizImg);
-            } else {
-            	if(!line) {
-            		questionText.setTranslateY(270 + (Goto.getWindowHeight()-864)/2);
-            	}
-            	else {
-            		questionText.setTranslateY(240 + (Goto.getWindowHeight()-864)/2);
-            	}
-                getChildren().add(questionText);
+    public QuizPane(BaseQuestion question) {
+        Goto.initializeWindowSize(Goto.getRootPane());
+        setPadding(new Insets(32, 0, 32, 0));
+        setAlignment(Pos.CENTER);
+
+        if (question instanceof hasPicture) {
+            HBox imagesBox = new HBox(25);
+            imagesBox.setAlignment(Pos.CENTER);
+
+            List<String> pictures = ((hasPicture) question).getPictureNames();
+
+            if (pictures != null) {
+                for (String fileName : pictures) {
+                    String path = "/" + fileName;
+                    var resource = Goto.class.getResourceAsStream(path);
+
+                    if (resource != null) {
+                        VBox column = new VBox(10);
+                        column.setAlignment(Pos.CENTER);
+
+                        ImageView quizImg = new ImageView(new Image(resource));
+                        quizImg.setPreserveRatio(true);
+                        quizImg.setFitWidth(280);
+
+                        Button hintBtn = new Button("Hint");
+                        hintBtn.setStyle("-fx-background-color: #FFD700; -fx-text-fill: black; -fx-font-weight: bold;");
+
+                        column.getChildren().addAll(quizImg, hintBtn);
+                        imagesBox.getChildren().add(column);
+                    }
+                }
             }
+
+            GridPane.setMargin(imagesBox, new Insets(0));
+            imagesBox.setAlignment(Pos.CENTER);
+            getChildren().add(imagesBox);
         }
-        else {
-        	if(!line) {
-        		questionText.setTranslateY(270 + (Goto.getWindowHeight()-864)/2);
-        	}
-        	else {
-        		questionText.setTranslateY(240 + (Goto.getWindowHeight()-864)/2);
-        	}
-        	
-            getChildren().add(questionText);
-        }
-        
     }
 }

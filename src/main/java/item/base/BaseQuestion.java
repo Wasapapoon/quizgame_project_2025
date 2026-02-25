@@ -2,22 +2,29 @@ package item.base;
 
 import item.usage.ChoiceType;
 
-public abstract class BaseQuestion extends BaseQuiz {
+public abstract class BaseQuestion {
+    private final ChoiceType type;
+    private final String answer;
 
-    public BaseQuestion(ChoiceType choiceType, String question, String answer) {
-        super(choiceType);
-        setQuestion(question);
-        setAnswer(answer);
+    public BaseQuestion(ChoiceType type, String answer) {
+        this.type = type;
+        this.answer = answer;
     }
 
-    public abstract String getAnswer();
+    public ChoiceType getChoiceType() {
+        return type;
+    }
 
-    public abstract void setAnswer(String answer);
+    public String getAnswer() {
+        return answer;
+    }
 
-    public abstract String getQuestion() ;
 
-    public abstract void setQuestion(String question);
+    public int getScore() {
+        return 0;
+    }
 
-    public abstract int getScore();
-
+    public String getQuestion() {
+        return "abc" ;
+    }
 }

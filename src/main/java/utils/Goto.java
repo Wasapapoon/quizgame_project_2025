@@ -11,14 +11,7 @@ import item.usage.hasPicture;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -31,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -197,34 +191,19 @@ public class Goto {
         choiceAnswers.add(cq16);
         choiceAnswers.add(cq17);
 
+        questions.clear();
+
         switch (difficultyLevel) {
             case "EASY" -> {
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "ข้อใดเป็นสัตว์เลี้ยงยอดนิยม", "แมว"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "อุปกรณ์ใดต่อไปนี้เป็นหน่วยประมวลผลกลางของคอมพิวเตอร์", "CPU"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "กาชาไลน์เรนเจอร์ เกลือไหม", "เกลือ"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "อาหารชนิดใดที่มีโปรตีนสูงที่สุด", "ไข่"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "ควรนอนหลับวันละกี่ชั่วโมงเพื่อสุขภาพที่ดี", "7-8 ชั่วโมง"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "อุปกรณ์ใดใช้ในการตรวจวัดอุณหภูมิร่างกาย", "เทอร์โมมิเตอร์"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ปีหน้าคือปี ค.ศ. อะไร", "2026", "quiz_pic01.png"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ปีที่แล้วคือปี ค.ศ. อะไร", "2024"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ปีนี้คือปี ค.ศ. อะไร", "2025", "quiz_pic02.jpg"));
-                easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ในรูปมีแมวกี่ตัว", "1", "cat.jpeg"));
-                Collections.shuffle(easyLevelQuestion);
-                questions.addAll(easyLevelQuestion);
-                quizPage(difficultyLevel);
+
+               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg")));
+
+               Collections.shuffle(easyLevelQuestion);
+               questions.addAll(easyLevelQuestion);
+               quizPage(difficultyLevel);
             }
             case "MEDIUM" -> {
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "ข้อใดไม่ใช่อุปกรณ์เก็บข้อมูลถาวร", "RAM", "อุปกรณ์ที่เก็บข้อมูล \"ชั่วคราว\"\nจะลบข้อมูลเมื่อปิดเครื่อง"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "สีของผักที่มีสารต้านอนุมูลอิสระสูงคือสีอะไร", "ถูกทุกข้อ", "มีหลายสี"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "อยากมีแฟน ทำไงดี", "หาคู่ด้วย CU-NEX", "ใช้แอพในการหาคู่"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "ทำไมเราไม่ควรนำจักรยานแช่ตู้เย็น", "เดี๋ยวจักรยานจะหนาว", "ในตู้เย็นมันหนาว"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "ใครคือนายกคนปัจจุบันของไทย", "ทักษิณ ชินวัตร", "ให้ตอบนายกตัวจริง"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "50 เดือนนับจากวันที่ 1 ม.ค. 2568 คือปีอะไร", "2572", "4 ปี คือ 48 เดือน"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ประเทศไทยมีทั้งหมดกี่อำเภอ", "878", "เกือบๆ 900 อำเภอ", "quiz_pic03.jpg"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "500 สัปดาห์นับจากวันที่ 1 ม.ค. 2568 คือปีอะไร", "2577", "10 ปี เท่ากับ 520 สัปดาห์"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ควอร์ไทล์ที่3 การแจกแจงแบบสม่ำเสมอ U(0,20)คือเท่าใด", "15", "สูตรหาควอร์ไทล์ที่ 3 สำหรับ\nการแจกแจงแบบสม่ำเสมอคือ Q3=a+0.75(b−a)"));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "มัธยฐานของการแจกแจงสม่ำเสมอ U(5,25) คือเท่าใด", "15", " สูตรมัธยฐานของการแจกแจงสม่ำเสมอ\nคำนวณจาก:Median=(a+b)/2"));
-
+                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
 
                 Collections.shuffle(MediumLevelQuestion);
                 questions.addAll(MediumLevelQuestion);
@@ -232,55 +211,21 @@ public class Goto {
             }
             case "HARD" -> {
 
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เวลาใดเหมาะสมกับการนอนหลับที่สุด", "5:00", "ตอบกวนๆ"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เครื่องดื่มชนิดใดที่ช่วยให้ร่างกายสดชื่นมากที่สุด", "เหล้า", "ตอบกวนๆ"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้า\"พี่โต\"เป็นพระเอกหนังพี่โตจะเล่นแนวไหน", "หนังดราม่า\"โตแล้วเจ็บ\"", "พี่โตต้องเป็นสายดราม่า"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้าเจอปุ่ม \"ห้ามกด\" คุณจะทำอะไร", "กดทันทีแบบไม่ต้องคิด", "คนเรามักมีสัญชาตญาณขัดคำสั่งโดยอัตโนมัติ"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้าเราอยู่ในเกม RPG และโดน NPC ด่า เราจะทำยังไง", "กระโดดเตะ NPC", "คนที่เล่นเกมแนวนี้มักจะชอบทดสอบระบบเสมอ"));
-
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "5000 วันนับจากวันที่ 1 ม.ค. 2568 คือปีอะไร", "2581", "10 ปี ประมาณ 3600 วัน, 3 ปี ประมาณ 1000 วัน"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "10000 วัน ประมาณกี่ปี", "27", "30 ปี ประมาณ 11000 วัน"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "20000 ชั่วโมง ประมาณกี่ปี", "2.28", "1 ปี มีประมาณ 8760 ชั่วโมง"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "1000000 วินาที ประมาณกี่วัน", "12", "10 วัน เท่ากับ 864000 วินาที"));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "1000000 วินาที ประมาณกี่วัน", "12", "10 วัน เท่ากับ 864000 วินาที"));
-
+                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
 
                 Collections.shuffle(HardLevelQuestion);
                 questions.addAll(HardLevelQuestion);
                 quizPage(difficultyLevel);
             }
             case "MIXED" -> {
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "กาชาไลน์เรนเจอร์ เกลือไหม", "เกลือ"));
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.CHOICE, "อุปกรณ์ใดใช้ในการตรวจวัดอุณหภูมิร่างกาย", "เทอร์โมมิเตอร์"));
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ปีหน้าคือปี ค.ศ. อะไร", "2026", "quiz_pic01.png"));
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ปีนี้คือปี ค.ศ. อะไร", "2025", "quiz_pic02.jpg"));
-
-                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "ทำไมเราไม่ควรนำจักรยานแช่ตู้เย็น", "เดี๋ยวจักรยานจะหนาว", "ในตู้เย็นมันหนาว"));
-                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.CHOICE, "ใครคือนายกคนปัจจุบันของไทย", "ทักษิณ ชินวัตร", "ให้ตอบนายกตัวจริง"));
-                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ประเทศไทยมีทั้งหมดกี่อำเภอ", "878", "เกือบๆ 900 อำเภอ", "quiz_pic03.jpg"));
-
-                MixedLvelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เวลาใดเหมาะสมกับการนอนหลับที่สุด", "5:00", "ตอบกวนๆ"));
-                MixedLvelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เครื่องดื่มชนิดใดที่ช่วยให้ร่างกายสดชื่นมากที่สุด", "เหล้า", "ตอบกวนๆ"));
-                MixedLvelQuestion.add(new HardQuestion(ChoiceType.TEXT, "5000 วันนับจากวันที่ 1 ม.ค. 2568 คือปีอะไร", "2581", "10 ปี ประมาณ 3600 วัน, 3 ปี ประมาณ 1000 วัน"));
+                MixedLvelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
 
                 Collections.shuffle(MixedLvelQuestion);
                 questions.addAll(MixedLvelQuestion);
-
-
                 quizPage(difficultyLevel);
             }
             default -> {
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เวลาใดเหมาะสมกับการนอนหลับที่สุด", "5:00", "ตอบกวนๆ"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "เครื่องดื่มชนิดใดที่ช่วยให้ร่างกายสดชื่นมากที่สุด", "เหล้า", "ตอบกวนๆ"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้า\"พี่โต\"เป็นพระเอกหนังพี่โตจะเล่นแนวไหน", "หนังดราม่า\"โตแล้วเจ็บ\"", "พี่โตต้องเป็นสายดราม่า"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้าเจอปุ่ม \"ห้ามกด\" คุณจะทำอะไร", "กดทันทีแบบไม่ต้องคิด", "คนเรามักมีสัญชาตญาณขัดคำสั่งโดยอัตโนมัติ"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "ถ้าเราอยู่ในเกม RPG และโดน NPC ด่า เราจะทำยังไง", "กระโดดเตะ NPC", "คนที่เล่นเกมแนวนี้มักจะชอบทดสอบระบบเสมอ"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.CHOICE, "มดอะไรกัดเจ็บที่สุด", "มดทอระยิด", "มิตรทรยศ"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "ถ้าพี่โตบอกจะเริ่มลดน้ำหนักพรุ่งนี้โอกาสที่จะเป็นจริงกี่เปอร์เซ็นต์", "0", "พี่โตไม่มีทางลดน้ำหนัก\nเพราะพูดอย่างเดียวแต่ไม่เริ่มทำสักที"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "ถ้าพี่โตบอกว่าจะออกกำลังกายทุกวันตั้งแต่พรุ่งนี้\n        โอกาสที่พรุ่งนี้จะมาถึงคือกี่เปอร์เซ็นต์", "-1", "ต่ำกว่าศูนย์อยู่หนึ่งซึ่งแปลว่าไม่มีวันเกิดขึ้นจริง"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "โอกาสที่พี่โตจะตอบแชททันทีในช่วงงานยุ่ง ๆ เป็นกี่เปอร์เซ็นต์", "1", "อาจมีโอกาสเกิดขึ้น แต่แทบเป็นไปไม่ได้"));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "  หากพี่โตตั้งใจจะสอน Java ให้นักเรียนภายใน\nเวลาที่กำหนดพี่โตจะใช้เวลาสอนจริงนานเท่าไหร่", "9999999999", "มากมายมหาศาล"));
-
+                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
 
                 Collections.shuffle(ExtremeLevelQuestion);
                 questions.addAll(ExtremeLevelQuestion);
@@ -326,97 +271,55 @@ public class Goto {
 
         return skip;
     }
-    
+
     public static void quizPage(String difficultyLevel) {
         clear();
 
-        Stage stage = (Stage) rootPane.getScene().getWindow(); 
+        Stage stage = (Stage) rootPane.getScene().getWindow();
         double width = stage.getWidth();
         double height = stage.getHeight();
-        
+
         Background bg;
-        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/quiz_background.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
+        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/titlescreen_background.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
         bg = new Background(bgImg);
         rootPane.setBackground(bg);
-        
-        
-        
-        ArrayList<String> choices = new ArrayList<>();
-        if(questions.getFirst().getChoiceType() == ChoiceType.CHOICE){
-            for(ChoiceQuiz c:choiceAnswers){
-                if(Objects.equals(c.getQuestion(), questions.getFirst().getQuestion())){
-                    choices.addAll(c.getChoices());
-                }
-            }
-        }
-             
-        
-        HBox hBox = new HBox(0);
+
+        HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.TOP_RIGHT);
-        
+        hBox.setPadding(new Insets(20, 20, 0, 0));
+
         if(questions.getFirst() instanceof hasHint) {
-        	
-        	hBox.getChildren().addAll(new HintButtonPane(questions.getFirst(), difficultyLevel), skipButton(difficultyLevel));
+            hBox.getChildren().addAll(new HintButtonPane(questions.getFirst(), difficultyLevel), skipButton(difficultyLevel));
+        } else {
+            hBox.getChildren().add(skipButton(difficultyLevel));
         }
-        else {
-        	hBox.getChildren().add(skipButton(difficultyLevel));
-        }
-        
+
         rootPane.getChildren().add(hBox);
-     	
-        if(questions.getFirst() instanceof hasHint) {
-        	if(((hasHint) questions.getFirst()).useHint()) {
-        		yourScore -= 2;
-        	}
-        	if(yourScore < 0) {
-        		yourScore = 0;
-        	}
-        }
-      
+
         Label score = new Label("Your Score : " + yourScore);
         score.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
         score.setTextFill(Color.WHITE);
-        VBox.setMargin(score, new Insets(-80, 0, 0, 0));
+        score.setAlignment(Pos.CENTER);
         rootPane.getChildren().add(score);
-        rootPane.getChildren().add(new QuizPane(questions.getFirst()));
-        
-        boolean questionLine = Pattern.compile("\n").matcher(questions.getFirst().getQuestion()).find();
-        
-        ChoicePane choicePane = new ChoicePane(choices, difficultyLevel);
+
+        QuizPane quizPane = new QuizPane(questions.getFirst());
+        VBox.setVgrow(quizPane, Priority.ALWAYS);
+        rootPane.getChildren().add(quizPane);
+
         TextPane textPane = new TextPane(difficultyLevel);
-        
-        if(questions.getFirst() instanceof hasPicture) {
-        	
-        	 if(((hasPicture) questions.getFirst()).getHasPicture()) {
-        		VBox.setMargin(textPane, new Insets(getWindowHeight()-659, 0, 0, 0));
-             }
-        	 else if(!((hasPicture) questions.getFirst()).getHasPicture() && questionLine){
-        		VBox.setMargin(textPane, new Insets(getWindowHeight()-424, 0, 0, 0));
-        	 }
-        	 else {
-        		 VBox.setMargin(textPane, new Insets(getWindowHeight()-374, 0, 0, 0)); 
-        	 }
-        }
-       
-        else {
-        	
-        	if(questionLine) {
-        		VBox.setMargin(textPane, new Insets(getWindowHeight()-424, 0, 0, 0));
-        	}
-        	else {
-        		VBox.setMargin(textPane, new Insets(getWindowHeight()-374, 0, 0, 0));
-        	}	
-        }
-        
+        textPane.setAlignment(Pos.CENTER);
+
         if (questions.getFirst().getChoiceType() == ChoiceType.CHOICE) {
-        	rootPane.getChildren().add(choicePane); 
+            rootPane.getChildren().add(new ChoicePane(new ArrayList<>(), difficultyLevel));
         } else {
-        	rootPane.getChildren().add(textPane);
+            rootPane.getChildren().add(textPane);
         }
-        
+
+        VBox.setMargin(textPane, new Insets(20, 0, 50, 0));
     }
 
-    
+
+
 
     public static void hintPage(BaseQuestion question, String difficultyLevel) { 
         clear();
@@ -474,7 +377,7 @@ public class Goto {
         double height = stage.getHeight();
         
         Background bg;
-        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/quiz_background_2.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
+        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/puzzle_background.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
         bg = new Background(bgImg);
         rootPane.setBackground(bg);
 

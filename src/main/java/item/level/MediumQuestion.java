@@ -5,105 +5,57 @@ import item.usage.ChoiceType;
 import item.usage.hasHint;
 import item.usage.hasPicture;
 
-public class MediumQuestion extends BaseQuestion implements hasHint, hasPicture {
+import java.util.List;
 
-    private String question;
+public class MediumQuestion extends BaseQuestion implements hasPicture, hasHint {
 
-    private String answer;
-
-    private Boolean hasPicture = false;
-
-    private String pictureName;
-    
+    private final List<String> pictureNames;
     private String hint;
-    
-    private Boolean useHint = false;
-    
-    private final Boolean hasHint = true;
+    private boolean useHint = false;
 
-    private final int SCORE = 15;
-
-    public MediumQuestion(ChoiceType type, String question, String answer, String hint) {
-        super(type,question,answer);
-        this.setHint(hint);
+    public MediumQuestion(ChoiceType type, String answer, List<String> pictureNames, String hint) {
+        super(type, answer);
+        this.pictureNames = pictureNames;
+        this.hint = hint;
     }
-
-    public MediumQuestion(ChoiceType type, String question, String answer, String hint, String pictureName) {
-        super(type,question,answer);
-        hasPicture = true;
-        this.setPictureName(pictureName);
-        this.setHint(hint);
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    @Override
-    public String getAnswer(){
-        return answer;
-    }
-
-    @Override
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    @Override
-    public int getScore(){
-        return SCORE;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
 
     @Override
     public boolean getHasPicture() {
-        return hasPicture;
+        return true;
     }
 
     @Override
-    public String getPictureName() {
-        return pictureName;
+    public void setPictureName(String pictureName) {
+
     }
 
     @Override
-    public void setPictureName(String pictureName){
-        this.pictureName = pictureName;
+    public List<String> getPictureNames() {
+        return pictureNames;
     }
-    
 
     @Override
-	public void setHint(String hint) {
-		this.hint = hint ;
-		
-	}
+    public String getHint() {
+        return hint;
+    }
 
-	@Override
-	public String getHint() {
-		
-		return hint;
-	}
+    @Override
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
 
-	@Override
-	public boolean getHasHint() {
-		
-		return hasHint;
-	}
-	
-	@Override
-	public boolean useHint() {
-		
-		return useHint;
-	}
+    @Override
+    public boolean getHasHint() {
+        return true;
+    }
 
-	@Override
-	public void setUseHint(boolean useHint) {
-		this.useHint = useHint;
-		
-	}
+    @Override
+    public boolean useHint() {
+        return useHint;
+    }
 
-	
+    @Override
+    public void setUseHint(boolean useHint) {
+        this.useHint = useHint;
+    }
 }
