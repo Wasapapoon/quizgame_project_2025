@@ -36,7 +36,7 @@ public class QuizPane extends GridPane {
 
                         ImageView quizImg = new ImageView(new Image(resource));
                         quizImg.setPreserveRatio(true);
-                        quizImg.setFitWidth(280);
+                        quizImg.setFitWidth(240);
 
                         Button hintBtn = new Button("Hint");
                         hintBtn.setStyle("-fx-background-color: #FFD700; -fx-text-fill: black; -fx-font-weight: bold;");
@@ -47,7 +47,6 @@ public class QuizPane extends GridPane {
                 }
             }
 
-            GridPane.setMargin(imagesBox, new Insets(0));
             imagesBox.setAlignment(Pos.CENTER);
             getChildren().add(imagesBox);
         }

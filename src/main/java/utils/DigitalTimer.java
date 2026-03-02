@@ -3,6 +3,7 @@ package utils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -74,6 +75,7 @@ public class DigitalTimer extends StackPane {
     private void updateLabel() {
         timerLabel.setText(String.format("%02d", timeRemaining));
     }
+
 
     public void setOnTimeOut(Runnable onTimeOut) {
         this.onTimeOut = onTimeOut;

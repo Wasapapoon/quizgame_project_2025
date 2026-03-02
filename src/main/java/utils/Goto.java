@@ -6,10 +6,7 @@ import item.level.HardQuestion;
 import item.level.MediumQuestion;
 import item.quiz.ChoiceQuiz;
 import item.usage.ChoiceType;
-import item.usage.hasHint;
-import item.usage.hasPicture;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
@@ -19,14 +16,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import pane.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import mode.GameLevelSelector;
 import javafx.geometry.Insets;
@@ -118,7 +111,7 @@ public class Goto {
         ArrayList<BaseQuestion> easyLevelQuestion= new ArrayList<>();
         ArrayList<BaseQuestion> MediumLevelQuestion = new ArrayList<>();
         ArrayList<BaseQuestion> HardLevelQuestion = new ArrayList<>();
-        ArrayList<BaseQuestion> MixedLvelQuestion = new ArrayList<>();
+        ArrayList<BaseQuestion> MixedLevelQuestion = new ArrayList<>();
         ArrayList<BaseQuestion> ExtremeLevelQuestion = new ArrayList<>();
 
 
@@ -233,14 +226,14 @@ public class Goto {
             }
             case "MIXED" -> {
 
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
-                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
-                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),"แมว"));
-                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),"แมว"));
-                MixedLvelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),"แมว"));
+                MixedLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+                MixedLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+                MixedLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),"แมว"));
+                MixedLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),"แมว"));
+                MixedLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),"แมว"));
 
-                Collections.shuffle(MixedLvelQuestion);
-                questions.addAll(MixedLvelQuestion);
+                Collections.shuffle(MixedLevelQuestion);
+                questions.addAll(MixedLevelQuestion);
                 quizPage(difficultyLevel);
             }
             default -> {
@@ -321,17 +314,41 @@ public class Goto {
 
         rootPane.getChildren().add(hBox);
 
-        gameTimer.setAlignment(Pos.TOP_CENTER);
+        HBox topStatus = new HBox();
+        topStatus.setAlignment(Pos.TOP_CENTER);
+        topStatus.setPadding(new Insets(-20, 50, 0, 50));
+
+        LifePane playerALife = new LifePane("PLAYER A");
+        LifePane playerBLife = new LifePane("PLAYER B");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        topStatus.getChildren().addAll(playerALife, spacer, playerBLife);
+        rootPane.getChildren().add(topStatus);
+
+        gameTimer.setAlignment(Pos.CENTER);
         rootPane.getChildren().add(gameTimer);
-        gameTimer.start(30);
+        VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
+        gameTimer.start(40);
+
 
         QuizPane quizPane = new QuizPane(questions.getFirst());
         VBox.setVgrow(quizPane, Priority.ALWAYS);
         rootPane.getChildren().add(quizPane);
 
-        TextPane textPane = new TextPane(difficultyLevel);
-        rootPane.getChildren().add(textPane);
-        VBox.setMargin(textPane, new Insets(0, 0, 40, 0));
+        HBox inputContainer = new HBox(80);
+        inputContainer.setAlignment(Pos.CENTER);
+        inputContainer.setPadding(new Insets(0, 60, 50, 60));
+
+        TextPane textPane1 = new TextPane(difficultyLevel, "PLAYER A INPUT");
+        TextPane textPane2 = new TextPane(difficultyLevel, "PLAYER B INPUT");
+
+        HBox.setHgrow(textPane1, Priority.ALWAYS);
+        HBox.setHgrow(textPane2, Priority.ALWAYS);
+
+        inputContainer.getChildren().addAll(textPane1, textPane2);
+        rootPane.getChildren().add(inputContainer);
 
         gameTimer.setOnTimeOut(() -> {
             System.out.println("Time's up!");
