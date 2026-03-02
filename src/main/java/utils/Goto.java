@@ -313,11 +313,11 @@ public class Goto {
         hBox.setAlignment(Pos.TOP_RIGHT);
         hBox.setPadding(new Insets(20, 20, 0, 0));
 
-        if(questions.getFirst() instanceof hasHint) {
-            hBox.getChildren().addAll(new HintButtonPane(questions.getFirst(), difficultyLevel), skipButton(difficultyLevel));
-        } else {
-            hBox.getChildren().add(skipButton(difficultyLevel));
-        }
+//        if(questions.getFirst() instanceof hasHint) {
+//            hBox.getChildren().addAll(new HintButtonPane(questions.getFirst(), difficultyLevel), skipButton(difficultyLevel));
+//        } else {
+//            hBox.getChildren().add(skipButton(difficultyLevel));
+//        }
 
         rootPane.getChildren().add(hBox);
 
