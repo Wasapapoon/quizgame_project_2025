@@ -10,10 +10,10 @@ import java.util.List;
 public class MediumQuestion extends BaseQuestion implements hasPicture, hasHint {
 
     private final List<String> pictureNames;
-    private String hint;
+    private List<String> hint;
     private boolean useHint = false;
 
-    public MediumQuestion(ChoiceType type, String answer, List<String> pictureNames, String hint) {
+    public MediumQuestion(ChoiceType type, String answer, List<String> pictureNames, List<String> hint) {
         super(type, answer);
         this.pictureNames = pictureNames;
         this.hint = hint;
@@ -26,7 +26,6 @@ public class MediumQuestion extends BaseQuestion implements hasPicture, hasHint 
 
     @Override
     public void setPictureName(String pictureName) {
-
     }
 
     @Override
@@ -35,12 +34,11 @@ public class MediumQuestion extends BaseQuestion implements hasPicture, hasHint 
     }
 
     @Override
-    public String getHint() {
+    public List<String> getHint() {
         return hint;
     }
 
-    @Override
-    public void setHint(String hint) {
+    public void setHint(List<String> hint) {
         this.hint = hint;
     }
 

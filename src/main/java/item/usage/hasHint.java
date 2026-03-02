@@ -1,12 +1,14 @@
 package item.usage;
 
+import java.util.List;
+
 public interface hasHint {
 	
 	boolean getHasHint();
 
-    void setHint(String hint);
+    void setHint(List<String> hint);
 
-    String getHint();
+    List<String> getHint();
     
     boolean useHint();
     

@@ -48,17 +48,17 @@ new BackgroundSize(100, 100, true, true, true, false))));
         HBox.setMargin(hintButton, new Insets(0, 40, 0, 0));
 
         
-        hintButton.setOnMouseClicked(mouseEvent -> {
-        	Goto.hintPage(question, difficultyLevel);
-        	if(!((hasHint) question).useHint() && !Goto.getHintClick()) {
-        		((hasHint) question).setUseHint(true);
-        		Goto.setHintClick(true);
-        	}
-        	else {
-        		((hasHint) question).setUseHint(false);
-        	}
-        	
-        });
+//        hintButton.setOnMouseClicked(mouseEvent -> {
+//        	Goto.hintPage(question, difficultyLevel);
+//        	if(!((hasHint) question).useHint() && !Goto.getHintClick()) {
+//        		((hasHint) question).setUseHint(true);
+//        		Goto.setHintClick(true);
+//        	}
+//        	else {
+//        		((hasHint) question).setUseHint(false);
+//        	}
+//
+//        });
 
         getChildren().add(hintButton);
     }

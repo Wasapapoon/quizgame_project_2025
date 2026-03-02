@@ -11,10 +11,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.Goto;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import item.base.BaseQuestion;
 import item.usage.hasHint;
@@ -22,35 +20,32 @@ import item.usage.hasHint;
 import static utils.Goto.quizPage;
 
 public class HintPane extends VBox {
-    private String difficultyLevel; 
+    private String difficultyLevel;
 
-    public HintPane(BaseQuestion question, String difficultyLevel) { 
-        this.difficultyLevel = difficultyLevel; 
+    public HintPane(BaseQuestion question, String difficultyLevel, int index) {
+        this.difficultyLevel = difficultyLevel;
         Goto.initializeWindowSize(Goto.getRootPane());
-        
+
         setSpacing(16);
         setPadding(new Insets(32, 0, 32, 0));
         setAlignment(Pos.CENTER);
 
-        boolean hintLine = Pattern.compile("\n").matcher(((hasHint) question).getHint()).find();
+        List<String> hints = ((hasHint) question).getHint();
 
-        if (((hasHint) question).getHasHint()) {
-            Text text = new Text("Hint : " + ((hasHint) question).getHint());
-            text.setFill(Color.WHITE);
-            if (text.getText().length() < 50) {
+        if (((hasHint) question).getHasHint() && hints != null && index < hints.size()) {
+            String specificHint = hints.get(index);
+            Text text = new Text("Hint : " + specificHint);
+            text.setFill(Color.YELLOW);
+
+            if (specificHint.length() < 50) {
                 text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
             } else {
-                text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 32));
+                text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 28));
             }
 
-            if (!hintLine) {
-                VBox.setMargin(text, new Insets(330 + (Goto.getWindowHeight() - 864) / 2, 0, 0, 0));
-            } else {
-                VBox.setMargin(text, new Insets(300 + (Goto.getWindowHeight() - 864) / 2, 0, 0, 0));
-            }
+            VBox.setMargin(text, new Insets(330 + (Goto.getWindowHeight() - 864) / 2.0, 0, 0, 0));
             getChildren().add(text);
         }
-
 
         Button back = new Button("Back");
         back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
@@ -74,17 +69,11 @@ public class HintPane extends VBox {
         back.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
         back.setPrefWidth(300);
         back.setPrefHeight(80);
-        if(!hintLine) {
-        	VBox.setMargin(back, new Insets(Goto.getWindowHeight()-594, 0, 0, 0));
-        }
-        else {
-        	VBox.setMargin(back, new Insets(Goto.getWindowHeight()-634, 0, 0, 0));
-        }
-        
 
-        back.setOnMouseClicked(mouseEvent -> quizPage(difficultyLevel));
+        VBox.setMargin(back, new Insets(Goto.getWindowHeight() - 594, 0, 0, 0));
 
-        
+        back.setOnAction(mouseEvent -> quizPage(difficultyLevel));
+
         getChildren().add(back);
     }
 }
