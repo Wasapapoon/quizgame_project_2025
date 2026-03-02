@@ -199,14 +199,22 @@ public class Goto {
         switch (difficultyLevel) {
             case "EASY" -> {
 
-               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg")));
+               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
+               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
+               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+
+
 
                Collections.shuffle(easyLevelQuestion);
                questions.addAll(easyLevelQuestion);
                quizPage(difficultyLevel);
             }
             case "MEDIUM" -> {
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
+                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),"แมว"));
+                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),"แมว"));
+                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),"แมว"));
+                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),"แมว"));
 
                 Collections.shuffle(MediumLevelQuestion);
                 questions.addAll(MediumLevelQuestion);
@@ -214,21 +222,35 @@ public class Goto {
             }
             case "HARD" -> {
 
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
+                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),"แมว"));
+                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),"แมว"));
+                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),"แมว"));
+
 
                 Collections.shuffle(HardLevelQuestion);
                 questions.addAll(HardLevelQuestion);
                 quizPage(difficultyLevel);
             }
             case "MIXED" -> {
-                MixedLvelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
+
+                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+                MixedLvelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),"แมว"));
+                MixedLvelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),"แมว"));
+                MixedLvelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),"แมว"));
 
                 Collections.shuffle(MixedLvelQuestion);
                 questions.addAll(MixedLvelQuestion);
                 quizPage(difficultyLevel);
             }
             default -> {
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "แมว", List.of("quiz_pic01.png", "quiz_pic02.jpg", "quiz_pic03.jpg"),"แมว"));
+                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),"แมว"));
+                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),"แมว"));
+                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),"แมว"));
+                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),"แมว"));
+                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),"แมว"));
+                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),"แมว"));
+                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),"แมว"));
 
                 Collections.shuffle(ExtremeLevelQuestion);
                 questions.addAll(ExtremeLevelQuestion);
