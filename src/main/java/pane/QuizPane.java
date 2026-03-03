@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import utils.Goto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class QuizPane extends GridPane {
 
@@ -55,10 +56,31 @@ public class QuizPane extends GridPane {
 
                         if (question instanceof hasHint) {
                             Button hintBtn = new Button("Hint");
-                            hintBtn.setPrefWidth(80);
-                            hintBtn.setPrefHeight(30);
-                            hintBtn.setStyle("-fx-background-color: #FFD700; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 5;");
+                            hintBtn.setPrefWidth(90);
+                            hintBtn.setPrefHeight(35);
+                            hintBtn.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 14));
 
+                            Image hintImage = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/hintback.png")));
+                            BackgroundImage bImg = new BackgroundImage(hintImage,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundPosition.CENTER,
+                                    new BackgroundSize(100, 100, true, true, true, false));
+
+                            hintBtn.setBackground(new Background(bImg));
+
+                            hintBtn.setOnMouseEntered(e -> {
+                                Image hoverImage = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/hintback2.png")));
+                                hintBtn.setBackground(new Background(new BackgroundImage(hoverImage,
+                                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                                        new BackgroundSize(100, 100, true, true, true, false))));
+                                hintBtn.setTextFill(Color.WHITE);
+                            });
+
+                            hintBtn.setOnMouseExited(e -> {
+                                hintBtn.setBackground(new Background(bImg));
+                                hintBtn.setTextFill(Color.BLACK);
+                            });
                             hintBtn.setOnAction(event -> {
                                 List<String> hints = ((hasHint) question).getHint();
                                 if (hints != null && index < hints.size()) {
