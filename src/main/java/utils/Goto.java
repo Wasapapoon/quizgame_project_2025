@@ -1,20 +1,14 @@
 package utils;
 
 import entity.Player;
-import item.base.BaseQuestion;
-import item.level.EasyQuestion;
-import item.level.HardQuestion;
-import item.level.MediumQuestion;
-import item.quiz.ChoiceQuiz;
-import item.usage.ChoiceType;
-import javafx.scene.control.Button;
+import item.base.BasePuzzle;
+import item.level.Easy;
+import item.level.Hard;
+import item.level.Medium;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import pane.*;
 
 import java.util.ArrayList;
@@ -33,15 +27,7 @@ public class Goto {
 
     private static MediaPlayer mediaPlayer;
 
-    private static final ArrayList<BaseQuestion> questions = new ArrayList<>();
-
-    private static final ArrayList<ChoiceQuiz> choiceAnswers = new ArrayList<>();
-
-    private static int yourScore = 0;
-    
-    private static int answerStreak = 0;
-
-    private static Boolean hintClick = false;
+    private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
 
     public static Player playerA = new Player("PLAYER A");
 
@@ -52,8 +38,6 @@ public class Goto {
     private static double windowWidth ;
     
     private static double windowHeight ;
-
-    private static int currentHintIndex = 0;
 
 
     public static void initializeWindowSize(RootPane root) {
@@ -112,97 +96,20 @@ public class Goto {
         }
         
         questions.clear();
-        choiceAnswers.clear();
-        yourScore = 0;
         
-        ArrayList<BaseQuestion> easyLevelQuestion= new ArrayList<>();
-        ArrayList<BaseQuestion> MediumLevelQuestion = new ArrayList<>();
-        ArrayList<BaseQuestion> HardLevelQuestion = new ArrayList<>();
-        ArrayList<BaseQuestion> MixedLevelQuestion = new ArrayList<>();
-        ArrayList<BaseQuestion> ExtremeLevelQuestion = new ArrayList<>();
-
-
-        ChoiceQuiz cq1 = new ChoiceQuiz();
-        ChoiceQuiz cq2 = new ChoiceQuiz();
-        ChoiceQuiz cq3 = new ChoiceQuiz();
-        ChoiceQuiz cq4 = new ChoiceQuiz();
-        ChoiceQuiz cq5 = new ChoiceQuiz();
-        ChoiceQuiz cq6 = new ChoiceQuiz();
-        ChoiceQuiz cq7 = new ChoiceQuiz();
-        ChoiceQuiz cq8 = new ChoiceQuiz();
-        ChoiceQuiz cq9 = new ChoiceQuiz();
-        ChoiceQuiz cq10 = new ChoiceQuiz();
-        ChoiceQuiz cq11 = new ChoiceQuiz();
-        ChoiceQuiz cq12 = new ChoiceQuiz();
-        ChoiceQuiz cq13 = new ChoiceQuiz();
-        ChoiceQuiz cq14 = new ChoiceQuiz();
-        ChoiceQuiz cq15 = new ChoiceQuiz();
-        ChoiceQuiz cq16 = new ChoiceQuiz();
-        //Extreme Question Choice
-        ChoiceQuiz cq17 = new ChoiceQuiz();
-
-        
-        cq1.addChoices("กาชาไลน์เรนเจอร์ เกลือไหม", "เกลือ", "ไม่เกลือ");
-       
-        cq2.addChoices("อยากมีแฟน ทำไงดี","หาคู่ด้วย CU-NEX", "สุ่มกาชา", "เล่น line ranger", "ถูกมากกว่า 1 ข้อ");
-        
-        cq3.addChoices("อาหารชนิดใดที่มีโปรตีนสูงที่สุด", "ข้าว", "ไข่", "มันฝรั่ง", "แตงโม");
-        
-        cq4.addChoices("ควรนอนหลับวันละกี่ชั่วโมงเพื่อสุขภาพที่ดี", "3-4 ชั่วโมง", "5-6 ชั่วโมง", "7-8 ชั่วโมง", "10-12 ชั่วโมง");
-        
-        cq5.addChoices("อุปกรณ์ใดใช้ในการตรวจวัดอุณหภูมิร่างกาย", "เครื่องวัดความดัน", "เทอร์โมมิเตอร์", "เครื่องวัดออกซิเจนในเลือด", "เครื่องชั่งน้ำหนัก");
-        
-        cq6.addChoices("สีของผักที่มีสารต้านอนุมูลอิสระสูงคือสีอะไร", "สีเขียว", "สีแดง", "สีม่วง", "ถูกทุกข้อ");
-        
-        cq7.addChoices("เวลาใดเหมาะสมกับการนอนหลับที่สุด", "23:00", "2:00", "5:00", "ถูกมากกว่า 1 ข้อ");
-        
-        cq8.addChoices("เครื่องดื่มชนิดใดที่ช่วยให้ร่างกายสดชื่นมากที่สุด", "น้ำเปล่า", "เหล้า", "น้ำอัดลม", "ถูกมากกว่า 1 ข้อ");
-        
-        cq9.addChoices("ทำไมเราไม่ควรนำจักรยานแช่ตู้เย็น", "เดี๋ยวจักรยานจะหนาว", "เดี๋ยวจักรยานจะร้อน");
-        
-        cq10.addChoices("ใครคือนายกคนปัจจุบันของไทย", "ทักษิณ ชินวัตร", "เศรษฐา ทวีสิน", "แพทองธาร ชินวัตร", "ถูกมากกว่า 1 ข้อ");
-       
-        cq11.addChoices("อุปกรณ์ใดต่อไปนี้เป็นหน่วยประมวลผลกลางของคอมพิวเตอร์", "RAM", "SSD", "CPU", "PSU");
-        
-        cq12.addChoices("ข้อใดเป็นสัตว์เลี้ยงยอดนิยม", "สิงโต", "ปลาวาฬ", "แมว", "หมี");
-        
-        cq13.addChoices("ข้อใดไม่ใช่อุปกรณ์เก็บข้อมูลถาวร", "HDD", "SSD", "RAM", "Flash Drive");
-        
-        cq14.addChoices("ถ้า\"พี่โต\"เป็นพระเอกหนังพี่โตจะเล่นแนวไหน", "หนังดราม่า\"โตแล้วเจ็บ\"", "หนังแอ็กชัน \"โตแมน ไรเดอร์\"", "หนังรัก \"โตโต้อกหัก\"","หนังตลก \"โตแหลกแจกฮา\"");
-        
-        cq15.addChoices("ถ้าเจอปุ่ม \"ห้ามกด\" คุณจะทำอะไร", "กดทันทีแบบไม่ต้องคิด", "เดินผ่านแบบไม่สนใจ", "ถามคนข้างๆว่ากดแล้วเป็นอะไร", "ตั้งวงสนทนาเพื่อวิเคราะห์ปุ่มนี้");
-        
-        cq16.addChoices("ถ้าเราอยู่ในเกม RPG และโดน NPC ด่า เราจะทำยังไง", "ตอบกลับไปให้เจ็บแสบ","ช่วยเหลือเพื่อให้ NPC ใจอ่อน", "เดินไปเปิดหีบสมบัติต่อ", "กระโดดเตะ NPC" );
-        //Extreme Question Choice
-        cq17.addChoices("มดอะไรกัดเจ็บที่สุด", "มดทอระยิด", "มดแดง", "มดดำ", "มดราชินี");
-
-        choiceAnswers.add(cq1);
-        choiceAnswers.add(cq2);
-        choiceAnswers.add(cq3);
-        choiceAnswers.add(cq4);
-        choiceAnswers.add(cq5);
-        choiceAnswers.add(cq6);
-        choiceAnswers.add(cq7);
-        choiceAnswers.add(cq8);
-        choiceAnswers.add(cq9);
-        choiceAnswers.add(cq10);
-        choiceAnswers.add(cq11);
-        choiceAnswers.add(cq12);
-        choiceAnswers.add(cq13);
-        choiceAnswers.add(cq14);
-        choiceAnswers.add(cq15);
-        choiceAnswers.add(cq16);
-        choiceAnswers.add(cq17);
-
-        questions.clear();
+        ArrayList<BasePuzzle> easyLevelQuestion= new ArrayList<>();
+        ArrayList<BasePuzzle> MediumLevelQuestion = new ArrayList<>();
+        ArrayList<BasePuzzle> HardLevelQuestion = new ArrayList<>();
+        ArrayList<BasePuzzle> MixedLevelQuestion = new ArrayList<>();
+        ArrayList<BasePuzzle> ExtremeLevelQuestion = new ArrayList<>();
 
         switch (difficultyLevel) {
             case "EASY" -> {
 
-               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
-               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
-               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
-               easyLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+               easyLevelQuestion.add(new Easy("บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
+               easyLevelQuestion.add(new Easy( "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
+               easyLevelQuestion.add(new Easy("ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+               easyLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
 
 
 
@@ -211,10 +118,10 @@ public class Goto {
                quizPage(difficultyLevel);
             }
             case "MEDIUM" -> {
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
-                MediumLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
+                MediumLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
+                MediumLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
+                MediumLevelQuestion.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
+                MediumLevelQuestion.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
 
                 Collections.shuffle(MediumLevelQuestion);
                 questions.addAll(MediumLevelQuestion);
@@ -222,9 +129,9 @@ public class Goto {
             }
             case "HARD" -> {
 
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
-                HardLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
+                HardLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
+                HardLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
+                HardLevelQuestion.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
 
 
                 Collections.shuffle(HardLevelQuestion);
@@ -233,24 +140,24 @@ public class Goto {
             }
             case "MIXED" -> {
 
-                MixedLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
-                MixedLevelQuestion.add(new EasyQuestion(ChoiceType.TEXT, "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
-                MixedLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                MixedLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                MixedLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
+                MixedLevelQuestion.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+                MixedLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+                MixedLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
+                MixedLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
+                MixedLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
 
                 Collections.shuffle(MixedLevelQuestion);
                 questions.addAll(MixedLevelQuestion);
                 quizPage(difficultyLevel);
             }
             default -> {
-                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
-                ExtremeLevelQuestion.add(new MediumQuestion(ChoiceType.TEXT, "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
-                ExtremeLevelQuestion.add(new HardQuestion(ChoiceType.TEXT, "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
+                ExtremeLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
+                ExtremeLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
+                ExtremeLevelQuestion.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
+                ExtremeLevelQuestion.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
+                ExtremeLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
+                ExtremeLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
+                ExtremeLevelQuestion.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
 
                 Collections.shuffle(ExtremeLevelQuestion);
                 questions.addAll(ExtremeLevelQuestion);
@@ -260,42 +167,6 @@ public class Goto {
            
     }
 
-
-    public static Button skipButton(String difficultyLevel) { 
-        Button skip = new Button("Skip");
-        
-        skip.setPrefWidth(165);
-        skip.setPrefHeight(50);
-
-        skip.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize(100, 100, true, true, true, false))));
-
-        skip.setOnMouseExited(mouseEvent -> {
-            skip.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            skip.setTextFill(Color.BLACK);
-        });
-
-        skip.setOnMouseEntered(mouseEvent -> {
-            skip.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            skip.setTextFill(Color.WHITE);
-        });
-
-        skip.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 17));
-        HBox.setMargin(skip, new Insets(0, 40, 0, 0));
-
-        
-        skip.setOnMouseClicked(mouseEvent -> {
-        	checkQuiz(difficultyLevel);
-        	setHintClick(false);
-        });
-
-        return skip;
-    }
     public static void quizPage(String difficultyLevel) {
         clear();
 
@@ -355,9 +226,8 @@ public class Goto {
         });
     }
 
-    public static void hintPage(BaseQuestion question, String difficultyLevel, int index) {
+    public static void hintPage(BasePuzzle question, String difficultyLevel, int index) {
         clear();
-        currentHintIndex = index;
         rootPane.getChildren().add(new HintPane(question, difficultyLevel, index));
     }
 
@@ -366,26 +236,7 @@ public class Goto {
         Boolean isCorrect = choice.equals(questions.getFirst().getAnswer());
 
         if (isCorrect) {
-            setAnswerStreak(getAnswerStreak() + 1);
-
-            int baseScore = questions.getFirst().getScore();
-            int streakBonus = 5 * (getAnswerStreak() - 1);
-
-            if (questions.getFirst().getChoiceType() == ChoiceType.CHOICE) {
-                currentPlayer.addScore(baseScore + streakBonus);
-            } else {
-                currentPlayer.addScore((2 * baseScore) + streakBonus);
-            }
-
             opponentLifePane.reduceHP();
-
-        } else {
-            setAnswerStreak(0);
-            currentPlayer.addScore(-5);
-
-            if (currentPlayer.getScore() < 0) {
-                currentPlayer.setScore(0);
-            }
         }
 
         return isCorrect;
@@ -396,19 +247,16 @@ public class Goto {
         clear();
         questions.removeFirst();
         if (questions.isEmpty()) {
-            scorePage(difficultyLevel);
+            resultPage(difficultyLevel);
             playerA.setHp(3);
             playerB.setHp(3);
-            playerA.setScore(0);
-            playerB.setScore(0);
-            setAnswerStreak(0);
         } else{
             quizPage(difficultyLevel); 
         }
     }
 
 
-    public static void scorePage(String difficultyLevel) {
+    public static void resultPage(String difficultyLevel) {
         clear();
 
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -436,8 +284,7 @@ public class Goto {
 
         music(Objects.requireNonNull(Goto.class.getResource("/music/score_music.mp3")).toExternalForm());
 
-        int finalScore = Math.max(playerA.getScore(), playerB.getScore());
-        rootPane.getChildren().add(new ScorePane(finalScore, difficultyLevel));
+        rootPane.getChildren().add(new ResultPane(difficultyLevel));
     }
     
     public static void levelSelectionPage(GameLevelSelector gameLevelSelector) {
@@ -445,23 +292,6 @@ public class Goto {
     	
     	rootPane.getChildren().add(new LevelSelectionPane(gameLevelSelector));
     }
-    
-
-	public static int getAnswerStreak() {
-		return answerStreak;
-	}
-
-	public static void setAnswerStreak(int answerStreak) {
-		Goto.answerStreak = answerStreak;
-	}
-
-	public static Boolean getHintClick() {
-		return hintClick;
-	}
-
-	public static void setHintClick(Boolean hintClick) {
-		Goto.hintClick = hintClick;
-	}
 
 	public static double getWindowWidth() {
 		return windowWidth;

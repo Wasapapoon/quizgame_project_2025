@@ -14,7 +14,7 @@ import utils.Goto;
 import java.util.List;
 import java.util.Objects;
 
-import item.base.BaseQuestion;
+import item.base.BasePuzzle;
 import item.usage.hasHint;
 
 import static utils.Goto.quizPage;
@@ -22,7 +22,7 @@ import static utils.Goto.quizPage;
 public class HintPane extends VBox {
     private String difficultyLevel;
 
-    public HintPane(BaseQuestion question, String difficultyLevel, int index) {
+    public HintPane(BasePuzzle question, String difficultyLevel, int index) {
         this.difficultyLevel = difficultyLevel;
         Goto.initializeWindowSize(Goto.getRootPane());
 

@@ -9,8 +9,5 @@ public interface hasHint {
     void setHint(List<String> hint);
 
     List<String> getHint();
-    
-    boolean useHint();
-    
-    public void setUseHint(boolean use);
+
 }

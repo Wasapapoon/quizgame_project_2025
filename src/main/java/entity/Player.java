@@ -4,13 +4,11 @@ import item.usage.hasLife;
 
 public class Player implements hasLife {
     private String name;
-    private int score;
     private int hp;
 
     public Player(String name) {
         this.name = name;
         this.hp = 3;
-        this.score = 0;
     }
 
     public String getName() {
@@ -19,18 +17,6 @@ public class Player implements hasLife {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void addScore(int points) {
-        this.score += points;
     }
 
     @Override

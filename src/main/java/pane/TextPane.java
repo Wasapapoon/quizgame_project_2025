@@ -81,15 +81,13 @@ public class TextPane extends VBox {
             pause.setOnFinished(event -> {
                 if (difficultyLevel.equals("EXTREME")) {
                     if (!checkAnswer) {
-                        Goto.scorePage(difficultyLevel);
-                        Goto.setAnswerStreak(0);
+                        Goto.resultPage(difficultyLevel);
                     } else {
                         Goto.checkQuiz(difficultyLevel);
                     }
                 } else {
                     Goto.checkQuiz(difficultyLevel);
                 }
-                Goto.setHintClick(false);
             });
             pause.play();
         });

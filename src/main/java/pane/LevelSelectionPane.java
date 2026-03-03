@@ -79,7 +79,6 @@ public class LevelSelectionPane extends VBox {
             gameLevelSelector.setDifficultyLevel(difficulty);
             gameLevelSelector.startGame(); 
             setBackButtonClicked(false);
-            Goto.setHintClick(false);
         });
 
         return button;
