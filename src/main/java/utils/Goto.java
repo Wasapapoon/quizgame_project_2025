@@ -303,7 +303,7 @@ public class Goto {
         double width = stage.getWidth();
         double height = stage.getHeight();
 
-        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/titlescreen_background.jpg"))),
+        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/game_background2.png"))),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
@@ -421,7 +421,7 @@ public class Goto {
         } else if (playerB.getHp() > playerA.getHp()) {
             winBgPath = "/playerB_win.png";
         } else {
-            winBgPath = "/draw_background.jpg";
+            winBgPath = "/draw_background.png";
         }
 
         BackgroundImage bgImg = new BackgroundImage(

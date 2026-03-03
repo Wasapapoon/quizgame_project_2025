@@ -51,7 +51,7 @@ public class ScorePane extends VBox {
             double height = stage.getHeight();
 
             BackgroundImage homeBg = new BackgroundImage(
-                new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/puzzle_background.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
+                new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/puzzle_background2.png"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
                 getRootPane().setBackground(new Background(homeBg));
 
             playerA.setHp(3);
