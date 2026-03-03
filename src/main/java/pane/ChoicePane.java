@@ -1,5 +1,6 @@
 package pane;
 
+import entity.Player;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,7 +24,7 @@ import java.util.Objects;
 public class ChoicePane extends HBox {
     private String difficultyLevel; 
     
-    public ChoicePane(ArrayList<String> choices, String difficultyLevel) { 
+    public ChoicePane(ArrayList<String> choices, String difficultyLevel, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         this.difficultyLevel = difficultyLevel;
         Goto.initializeWindowSize(Goto.getRootPane());
         setAlignment(Pos.CENTER);
@@ -62,7 +63,7 @@ public class ChoicePane extends HBox {
             
             button.setOnMouseClicked(mouseEvent -> {
             	
-           		Boolean checkAnswer = Goto.checkAnswer(choice, difficultyLevel);
+           		Boolean checkAnswer = Goto.checkAnswer(choice, difficultyLevel, currentPlayer, opponentPlayer, opponentLifePane);
 
 					button.setBackground(new Background(new BackgroundFill(checkAnswer ? Color.GREEN : Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 					button.setTextFill(Color.BLACK);

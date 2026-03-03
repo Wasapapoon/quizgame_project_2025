@@ -1,5 +1,6 @@
 package pane;
 
+import entity.Player;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,13 +18,14 @@ import java.util.Objects;
 
 public class LifePane extends VBox {
     private List<ImageView> hearts = new ArrayList<>();
-    private int hp = 3;
+    private Player player;
 
-    public LifePane(String playerName) {
+    public LifePane(Player player) {
+        this.player = player;
         setSpacing(10);
         setAlignment(Pos.CENTER);
 
-        Label nameLabel = new Label(playerName);
+        Label nameLabel = new Label(player.getName());
         nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         nameLabel.setTextFill(Color.WHITE);
 
@@ -38,13 +40,22 @@ public class LifePane extends VBox {
             heartsBox.getChildren().add(heart);
         }
 
+        updateHazardDisplay();
         getChildren().addAll(nameLabel, heartsBox);
     }
 
-    public void reduceHP() {
-        if (hp > 0) {
-            hp--;
-            hearts.get(hp).setVisible(false);
+    public void updateHazardDisplay() {
+        for (int i = 0; i < hearts.size(); i++) {
+            if (i < player.getHp()) {
+                hearts.get(i).setVisible(true);
+            } else {
+                hearts.get(i).setVisible(false);
+            }
         }
+    }
+
+    public void reduceHP() {
+        player.reduceHp();
+        updateHazardDisplay();
     }
 }

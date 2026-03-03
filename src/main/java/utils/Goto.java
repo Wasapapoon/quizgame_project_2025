@@ -1,5 +1,6 @@
 package utils;
 
+import entity.Player;
 import item.base.BaseQuestion;
 import item.level.EasyQuestion;
 import item.level.HardQuestion;
@@ -41,6 +42,10 @@ public class Goto {
     private static int answerStreak = 0;
 
     private static Boolean hintClick = false;
+
+    public static Player playerA = new Player("PLAYER A");
+
+    public static Player playerB = new Player("PLAYER B");
 
     public static DigitalTimer gameTimer = new DigitalTimer();
     
@@ -315,15 +320,14 @@ public class Goto {
         topStatus.setAlignment(Pos.TOP_CENTER);
         topStatus.setPadding(new Insets(-20, 50, 0, 50));
 
-        LifePane playerALife = new LifePane("PLAYER A");
-        LifePane playerBLife = new LifePane("PLAYER B");
+        LifePane playerALife = new LifePane(playerA);
+        LifePane playerBLife = new LifePane(playerB);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         topStatus.getChildren().addAll(playerALife, spacer, playerBLife);
         rootPane.getChildren().add(topStatus);
-
         gameTimer.setAlignment(Pos.CENTER);
         rootPane.getChildren().add(gameTimer);
         VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
@@ -337,8 +341,8 @@ public class Goto {
         inputContainer.setAlignment(Pos.CENTER);
         inputContainer.setPadding(new Insets(0, 60, 50, 60));
 
-        TextPane textPane1 = new TextPane(difficultyLevel, "PLAYER A INPUT");
-        TextPane textPane2 = new TextPane(difficultyLevel, "PLAYER B INPUT");
+        TextPane textPane1 = new TextPane(difficultyLevel, "PLAYER A INPUT", playerA, playerB, playerBLife);
+        TextPane textPane2 = new TextPane(difficultyLevel, "PLAYER B INPUT", playerB, playerA, playerALife);
 
         HBox.setHgrow(textPane1, Priority.ALWAYS);
         HBox.setHgrow(textPane2, Priority.ALWAYS);
@@ -358,32 +362,32 @@ public class Goto {
     }
 
 
-    public static Boolean checkAnswer(String choice, String difficultyLevel) {
-	
+    public static Boolean checkAnswer(String choice, String difficultyLevel, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         Boolean isCorrect = choice.equals(questions.getFirst().getAnswer());
 
         if (isCorrect) {
-        	setAnswerStreak(getAnswerStreak() + 1);
-        	
-        	if(questions.getFirst().getChoiceType() == ChoiceType.CHOICE) {
-        		yourScore += (questions.getFirst().getScore() + (5)*(getAnswerStreak() - 1));
-        	}
-        	else {
-        		yourScore += ((2)*(questions.getFirst().getScore()) + (5)*(getAnswerStreak() - 1));
-        	}
+            setAnswerStreak(getAnswerStreak() + 1);
+
+            int baseScore = questions.getFirst().getScore();
+            int streakBonus = 5 * (getAnswerStreak() - 1);
+
+            if (questions.getFirst().getChoiceType() == ChoiceType.CHOICE) {
+                currentPlayer.addScore(baseScore + streakBonus);
+            } else {
+                currentPlayer.addScore((2 * baseScore) + streakBonus);
+            }
+
+            opponentLifePane.reduceHP();
+
+        } else {
+            setAnswerStreak(0);
+            currentPlayer.addScore(-5);
+
+            if (currentPlayer.getScore() < 0) {
+                currentPlayer.setScore(0);
+            }
         }
-        
-        else {
-        	yourScore -= 5;
-        	setAnswerStreak(0);
-        }
-        
-        
-      
-        if(yourScore < 0) {
-        	yourScore = 0;
-        }
-        
+
         return isCorrect;
     }
 
@@ -392,7 +396,11 @@ public class Goto {
         clear();
         questions.removeFirst();
         if (questions.isEmpty()) {
-            scorePage(difficultyLevel); 
+            scorePage(difficultyLevel);
+            playerA.setHp(3);
+            playerB.setHp(3);
+            playerA.setScore(0);
+            playerB.setScore(0);
             setAnswerStreak(0);
         } else{
             quizPage(difficultyLevel); 

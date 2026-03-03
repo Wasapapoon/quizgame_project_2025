@@ -1,5 +1,6 @@
 package pane;
 
+import entity.Player;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +22,7 @@ import java.util.Objects;
 public class TextPane extends VBox {
     private String difficultyLevel;
 
-    public TextPane(String difficultyLevel, String playerLabelText) {
+    public TextPane(String difficultyLevel, String playerLabelText, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         this.difficultyLevel = difficultyLevel;
         setAlignment(Pos.CENTER);
 
@@ -63,14 +64,18 @@ public class TextPane extends VBox {
             button.setTextFill(Color.WHITE);
         });
 
-        button.setOnMouseClicked(mouseEvent -> {
-            boolean checkAnswer = Goto.checkAnswer(textField.getText(), difficultyLevel);
+        button.setOnAction(actionEvent -> {
+            boolean checkAnswer = Goto.checkAnswer(textField.getText(), difficultyLevel, currentPlayer, opponentPlayer, opponentLifePane);
             textField.setBackground(new Background(new BackgroundFill(checkAnswer ? Color.GREEN : Color.RED, new CornerRadii(5), Insets.EMPTY)));
 
             String soundPath = checkAnswer ? "/sound/correct.mp3" : "/sound/wrong.mp3";
-            Media soundMedia = new Media(Objects.requireNonNull(getClass().getResource(soundPath)).toExternalForm());
-            MediaPlayer mediaPlayer = new MediaPlayer(soundMedia);
-            mediaPlayer.play();
+            try {
+                Media soundMedia = new Media(Objects.requireNonNull(getClass().getResource(soundPath)).toExternalForm());
+                MediaPlayer mediaPlayer = new MediaPlayer(soundMedia);
+                mediaPlayer.play();
+            } catch (Exception e) {
+                System.out.println("Sound file not found");
+            }
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             pause.setOnFinished(event -> {
