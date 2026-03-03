@@ -105,13 +105,10 @@ public class Goto {
 
         switch (difficultyLevel) {
             case "EASY" -> {
-
                easyLevelQuestion.add(new Easy("บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
                easyLevelQuestion.add(new Easy( "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
                easyLevelQuestion.add(new Easy("ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
                easyLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
-
-
 
                Collections.shuffle(easyLevelQuestion);
                questions.addAll(easyLevelQuestion);
@@ -128,18 +125,15 @@ public class Goto {
                 quizPage(difficultyLevel);
             }
             case "HARD" -> {
-
                 HardLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
                 HardLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
                 HardLevelQuestion.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
-
 
                 Collections.shuffle(HardLevelQuestion);
                 questions.addAll(HardLevelQuestion);
                 quizPage(difficultyLevel);
             }
             case "MIXED" -> {
-
                 MixedLevelQuestion.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
                 MixedLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
                 MixedLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
@@ -164,7 +158,6 @@ public class Goto {
                 quizPage(difficultyLevel);
             }
         }
-           
     }
 
     public static void quizPage(String difficultyLevel) {
@@ -204,7 +197,7 @@ public class Goto {
         VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
         gameTimer.start(40);
 
-        QuizPane quizPane = new QuizPane(questions.getFirst(), difficultyLevel);
+        GamePane quizPane = new GamePane(questions.getFirst(), difficultyLevel);
         VBox.setVgrow(quizPane, Priority.ALWAYS);
         rootPane.getChildren().add(quizPane);
 

@@ -16,9 +16,9 @@ import utils.Goto;
 import java.util.List;
 import java.util.Objects;
 
-public class QuizPane extends GridPane {
+public class GamePane extends GridPane {
 
-    public QuizPane(BasePuzzle question, String difficultyLevel) {
+    public GamePane(BasePuzzle question, String difficultyLevel) {
         Goto.initializeWindowSize(Goto.getRootPane());
         setPadding(new Insets(32, 0, 32, 0));
         setAlignment(Pos.CENTER);
