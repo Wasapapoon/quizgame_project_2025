@@ -408,20 +408,36 @@ public class Goto {
     }
 
 
-    public static void scorePage(String difficultyLevel){
+    public static void scorePage(String difficultyLevel) {
         clear();
-        
-        Stage stage = (Stage) rootPane.getScene().getWindow(); 
+
+        Stage stage = (Stage) rootPane.getScene().getWindow();
         double width = stage.getWidth();
         double height = stage.getHeight();
-        
-        Background bg;
-        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/puzzle_background.jpg"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
-        bg = new Background(bgImg);
-        rootPane.setBackground(bg);
+
+        String winBgPath;
+        if (playerA.getHp() > playerB.getHp()) {
+            winBgPath = "/playerA_win.png";
+        } else if (playerB.getHp() > playerA.getHp()) {
+            winBgPath = "/playerB_win.png";
+        } else {
+            winBgPath = "/draw_background.jpg";
+        }
+
+        BackgroundImage bgImg = new BackgroundImage(
+                new Image(Objects.requireNonNull(Goto.class.getResourceAsStream(winBgPath))),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(width, height, false, false, false, false)
+        );
+
+        rootPane.setBackground(new Background(bgImg));
 
         music(Objects.requireNonNull(Goto.class.getResource("/music/score_music.mp3")).toExternalForm());
-        rootPane.getChildren().add(new ScorePane(yourScore, difficultyLevel)); 
+
+        int finalScore = Math.max(playerA.getScore(), playerB.getScore());
+        rootPane.getChildren().add(new ScorePane(finalScore, difficultyLevel));
     }
     
     public static void levelSelectionPage(GameLevelSelector gameLevelSelector) {
