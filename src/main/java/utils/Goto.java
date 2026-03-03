@@ -195,7 +195,7 @@ public class Goto {
         gameTimer.setAlignment(Pos.CENTER);
         rootPane.getChildren().add(gameTimer);
         VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
-        gameTimer.start(40);
+        gameTimer.start(questions.getFirst().getTimeLimit());
 
         GamePane quizPane = new GamePane(questions.getFirst(), difficultyLevel);
         VBox.setVgrow(quizPane, Priority.ALWAYS);

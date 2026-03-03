@@ -9,6 +9,7 @@ public class Medium extends BasePuzzle implements hasHint {
 
     private final List<String> pictureNames;
     private List<String> hint;
+    private final int timeLimit = 40;
 
     public Medium(String answer, List<String> pictureNames, List<String> hint) {
         super(answer);
@@ -44,4 +45,8 @@ public class Medium extends BasePuzzle implements hasHint {
         return true;
     }
 
+    @Override
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 }

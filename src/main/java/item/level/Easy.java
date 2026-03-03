@@ -7,6 +7,7 @@ import java.util.List;
 public class Easy extends BasePuzzle {
 
     private final List<String> pictureNames;
+    private final int timeLimit = 20;
     private boolean hasPicture = false;
 
     public Easy(String answer, List<String> pictureNames) {
@@ -30,4 +31,8 @@ public class Easy extends BasePuzzle {
         return pictureNames;
     }
 
+    @Override
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 }

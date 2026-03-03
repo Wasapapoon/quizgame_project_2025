@@ -20,4 +20,6 @@ public abstract class BasePuzzle {
 
     public abstract List<String> getPictureNames();
 
+    public abstract int getTimeLimit();
+
 }

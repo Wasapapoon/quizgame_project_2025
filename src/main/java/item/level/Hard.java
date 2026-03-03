@@ -9,6 +9,7 @@ public class Hard extends BasePuzzle implements hasHint {
 
     private final List<String> pictureNames;
     private List<String> hint;
+    private final int timeLimit = 60;
 
     public Hard(String answer, List<String> pictureNames, List<String> hint) {
         super(answer);
@@ -42,5 +43,10 @@ public class Hard extends BasePuzzle implements hasHint {
     @Override
     public boolean getHasHint() {
         return true;
+    }
+
+    @Override
+    public int getTimeLimit() {
+        return timeLimit;
     }
 }
