@@ -40,7 +40,7 @@ public class LevelSelectionPane extends VBox {
         Button easyButton = createDifficultyButton("Easy", DifficultyLevel.EASY);
         Button mediumButton = createDifficultyButton("Medium", DifficultyLevel.MEDIUM);
         Button hardButton = createDifficultyButton("Hard", DifficultyLevel.HARD);
-        Button mixedButton = createDifficultyButton("Mixed", DifficultyLevel.MIXED);
+        Button mixedButton = createDifficultyButton("Battle", DifficultyLevel.MIXED);
         Button extremeButton = createDifficultyButton("Extreme", DifficultyLevel.EXTREME);
 
 
@@ -60,7 +60,7 @@ public class LevelSelectionPane extends VBox {
         text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 45));
         text.setFill(Color.WHITE);
         
-        buttonContainer.getChildren().addAll(easyButton, mediumButton, hardButton, mixedButton, extremeButton);
+        buttonContainer.getChildren().addAll(easyButton, mediumButton, hardButton, mixedButton);
         getChildren().addAll(text, buttonContainer, createBackButton());
     }
 

@@ -29,6 +29,8 @@ public class Goto {
 
     private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
 
+    public static Player player = new Player("HP LEFT");
+
     public static Player playerA = new Player("PLAYER A");
 
     public static Player playerB = new Player("PLAYER B");
@@ -112,7 +114,7 @@ public class Goto {
 
                Collections.shuffle(easyLevelQuestion);
                questions.addAll(easyLevelQuestion);
-               quizPage(difficultyLevel);
+               singlePlayerPage(difficultyLevel);
             }
             case "MEDIUM" -> {
                 MediumLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
@@ -122,7 +124,7 @@ public class Goto {
 
                 Collections.shuffle(MediumLevelQuestion);
                 questions.addAll(MediumLevelQuestion);
-                quizPage(difficultyLevel);
+                singlePlayerPage(difficultyLevel);
             }
             case "HARD" -> {
                 HardLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
@@ -131,7 +133,7 @@ public class Goto {
 
                 Collections.shuffle(HardLevelQuestion);
                 questions.addAll(HardLevelQuestion);
-                quizPage(difficultyLevel);
+                singlePlayerPage(difficultyLevel);
             }
             case "MIXED" -> {
                 MixedLevelQuestion.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
@@ -220,12 +222,67 @@ public class Goto {
 
     }
 
+    public static void singlePlayerPage(String difficultyLevel) {
+        clear();
+
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        double width = stage.getWidth();
+        double height = stage.getHeight();
+
+        BackgroundImage bgImg = new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/game_background2.png"))),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(width, height, false, false, false, false));
+        rootPane.setBackground(new Background(bgImg));
+
+        HBox topStatus = new HBox();
+        topStatus.setAlignment(Pos.TOP_RIGHT);
+        topStatus.setPadding(new Insets(20, 50, 0, 50));
+
+        LifePane playerLife = new LifePane(player);
+        topStatus.getChildren().add(playerLife);
+        rootPane.getChildren().add(topStatus);
+
+        BasePuzzle currentQuestion = questions.getFirst();
+        GamePane gamePane = new GamePane(currentQuestion, difficultyLevel);
+
+        gameTimer.setAlignment(Pos.CENTER);
+        gameTimer.setGameContext(gamePane, currentQuestion, difficultyLevel);
+        rootPane.getChildren().add(gameTimer);
+
+        VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
+        gameTimer.start(currentQuestion.getTimeLimit());
+
+        VBox.setVgrow(gamePane, Priority.ALWAYS);
+        rootPane.getChildren().add(gamePane);
+
+        HBox inputContainer = new HBox();
+        inputContainer.setAlignment(Pos.CENTER);
+        inputContainer.setPadding(new Insets(0, 0, 50, 0));
+
+        TextPane textPane = new TextPane(difficultyLevel, "YOUR INPUT", player, null, playerLife);
+        HBox.setHgrow(textPane, Priority.ALWAYS);
+        inputContainer.getChildren().add(textPane);
+        rootPane.getChildren().add(inputContainer);
+
+        gameTimer.setOnTimeOut(() -> {
+            player.setHp(player.getHp() - 1);
+            playerLife.updateHazardDisplay();
+//            if (playerA.getHp() <= 0) {
+//
+//            }
+        });
+    }
+
 
     public static Boolean checkAnswer(String choice, String difficultyLevel, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         Boolean isCorrect = choice.equals(questions.getFirst().getAnswer());
 
-        if (isCorrect) {
-            opponentLifePane.reduceHP();
+        if(difficultyLevel.equals("MIXED")){
+            if (isCorrect) {
+                opponentLifePane.reduceHP();
+            }
         }
 
         return isCorrect;
@@ -240,7 +297,14 @@ public class Goto {
             playerA.setHp(3);
             playerB.setHp(3);
         } else{
-            quizPage(difficultyLevel); 
+            if(difficultyLevel.equals("EXTREME") || difficultyLevel.equals("MIXED")){
+                quizPage(difficultyLevel);
+            }
+            else{
+                singlePlayerPage(difficultyLevel);
+            }
+
+
         }
     }
 
@@ -253,13 +317,24 @@ public class Goto {
         double height = stage.getHeight();
 
         String winBgPath;
-        if (playerA.getHp() > playerB.getHp()) {
-            winBgPath = "/playerA_win.png";
-        } else if (playerB.getHp() > playerA.getHp()) {
-            winBgPath = "/playerB_win.png";
-        } else {
-            winBgPath = "/draw_background.png";
+        if(difficultyLevel.equals("MIXED")){
+            if (playerA.getHp() > playerB.getHp()) {
+                winBgPath = "/playerA_win.png";
+            } else if (playerB.getHp() > playerA.getHp()) {
+                winBgPath = "/playerB_win.png";
+            } else {
+                winBgPath = "/draw_background.png";
+            }
         }
+        else{
+            if (player.getHp() > 0){
+                winBgPath = "/you_win.png";
+            }
+            else{
+                winBgPath = "/game_over.png";
+            }
+        }
+
 
         BackgroundImage bgImg = new BackgroundImage(
                 new Image(Objects.requireNonNull(Goto.class.getResourceAsStream(winBgPath))),
