@@ -310,9 +310,12 @@ public class Goto {
         gameTimer.setOnTimeOut(() -> {
             player.setHp(player.getHp() - 1);
             playerLife.updateHazardDisplay();
-//            if (playerA.getHp() <= 0) {
-//
-//            }
+            checkQuiz(difficultyLevel);
+
+            if (player.getHp() <= 0) {
+                resultPage(difficultyLevel);
+                player.setHp(3);
+            }
         });
     }
 
@@ -335,10 +338,11 @@ public class Goto {
         questions.removeFirst();
         if (questions.isEmpty()) {
             resultPage(difficultyLevel);
+            player.setHp(3);
             playerA.setHp(3);
             playerB.setHp(3);
         } else{
-            if(difficultyLevel.equals("EXTREME") || difficultyLevel.equals("MIXED")){
+            if(difficultyLevel.equals("MIXED")){
                 quizPage(difficultyLevel);
             }
             else{
