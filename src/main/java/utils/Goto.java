@@ -261,6 +261,21 @@ public class Goto {
             }
         });
 
+        gameTimer.setOnTimeOut(() -> {
+            playerA.setHp(playerA.getHp() - 1);
+            playerB.setHp(playerB.getHp() - 1);
+            playerALife.updateHazardDisplay();
+            playerBLife.updateHazardDisplay();
+
+            checkQuiz(difficultyLevel);
+        });
+
+        if (playerA.getHp() <= 0 || playerB.getHp() <= 0) {
+            resultPage(difficultyLevel);
+            playerA.setHp(3);
+            playerB.setHp(3);
+        }
+
     }
 
     public static void singlePlayerPage(String difficultyLevel) {
@@ -311,12 +326,12 @@ public class Goto {
             player.setHp(player.getHp() - 1);
             playerLife.updateHazardDisplay();
             checkQuiz(difficultyLevel);
-
-            if (player.getHp() <= 0) {
-                resultPage(difficultyLevel);
-                player.setHp(3);
-            }
         });
+
+        if (player.getHp() <= 0) {
+            resultPage(difficultyLevel);
+            player.setHp(3);
+        }
     }
 
 
