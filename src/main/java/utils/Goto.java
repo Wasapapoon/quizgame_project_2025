@@ -110,66 +110,53 @@ public class Goto {
         
         questions.clear();
         
-        ArrayList<BasePuzzle> easyLevelQuestion= new ArrayList<>();
-        ArrayList<BasePuzzle> MediumLevelQuestion = new ArrayList<>();
-        ArrayList<BasePuzzle> HardLevelQuestion = new ArrayList<>();
-        ArrayList<BasePuzzle> MixedLevelQuestion = new ArrayList<>();
-        ArrayList<BasePuzzle> ExtremeLevelQuestion = new ArrayList<>();
+        ArrayList<BasePuzzle> EasyLevel= new ArrayList<>();
+        ArrayList<BasePuzzle> MediumLevel = new ArrayList<>();
+        ArrayList<BasePuzzle> HardLevel = new ArrayList<>();
+        ArrayList<BasePuzzle> BattleMode = new ArrayList<>();
 
         switch (gameMode) {
             case "EASY" -> {
-               easyLevelQuestion.add(new Easy("บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
-               easyLevelQuestion.add(new Easy( "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
-               easyLevelQuestion.add(new Easy("ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
-               easyLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+                EasyLevel.add(new Easy("บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
+                EasyLevel.add(new Easy( "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
+                EasyLevel.add(new Easy("ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+                EasyLevel.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
 
-               Collections.shuffle(easyLevelQuestion);
-               questions.addAll(easyLevelQuestion);
+               Collections.shuffle(EasyLevel);
+               questions.addAll(EasyLevel);
                singlePlayerPage(gameMode);
             }
             case "MEDIUM" -> {
-                MediumLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                MediumLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                MediumLevelQuestion.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
-                MediumLevelQuestion.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
+                MediumLevel.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
+                MediumLevel.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
+                MediumLevel.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
+                MediumLevel.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
 
-                Collections.shuffle(MediumLevelQuestion);
-                questions.addAll(MediumLevelQuestion);
+                Collections.shuffle(MediumLevel);
+                questions.addAll(MediumLevel);
                 singlePlayerPage(gameMode);
             }
             case "HARD" -> {
-                HardLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
-                HardLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
-                HardLevelQuestion.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
+                HardLevel.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
+                HardLevel.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
+                HardLevel.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
 
-                Collections.shuffle(HardLevelQuestion);
-                questions.addAll(HardLevelQuestion);
+                Collections.shuffle(HardLevel);
+                questions.addAll(HardLevel);
                 singlePlayerPage(gameMode);
             }
-            case "MIXED" -> {
-                MixedLevelQuestion.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
-                MixedLevelQuestion.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
-                MixedLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                MixedLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                MixedLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
-
-                Collections.shuffle(MixedLevelQuestion);
-                questions.addAll(MixedLevelQuestion);
-                quizPage(gameMode);
-            }
             default -> {
-                ExtremeLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
-                ExtremeLevelQuestion.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
-                ExtremeLevelQuestion.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
-                ExtremeLevelQuestion.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
-                ExtremeLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
-                ExtremeLevelQuestion.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
-                ExtremeLevelQuestion.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
+                BattleMode.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
+                BattleMode.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
+                BattleMode.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
+                BattleMode.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
+                BattleMode.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
 
-                Collections.shuffle(ExtremeLevelQuestion);
-                questions.addAll(ExtremeLevelQuestion);
+                Collections.shuffle(BattleMode);
+                questions.addAll(BattleMode);
                 quizPage(gameMode);
             }
+
         }
     }
 
