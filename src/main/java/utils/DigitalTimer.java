@@ -28,7 +28,7 @@ public class DigitalTimer extends StackPane {
         timerLabel.setFont(Font.font("Impact", FontWeight.BOLD, 120));
         timerLabel.setTextFill(Color.web("#FFFF00"));
         DropShadow glow = new DropShadow();
-        glow.setColor(Color.web("#FFFF00", 0.8));
+        glow.setColor(Color.web("#FFFFFF", 0.2));
         glow.setRadius(25);
         glow.setSpread(0.6);
         timerLabel.setEffect(glow);
@@ -45,6 +45,7 @@ public class DigitalTimer extends StackPane {
     public void start(int seconds) {
         stop();
         this.timeRemaining = seconds;
+        timerLabel.setTextFill(Color.web("#FFFF00"));
         updateLabel();
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
@@ -56,7 +57,7 @@ public class DigitalTimer extends StackPane {
                 gamePane.updateHintsByTime(timeRemaining, currentQuestion, difficultyLevel);
             }
 
-            if (timeRemaining <= 5) {
+            if (timeRemaining <= 9) {
                 timerLabel.setTextFill(Color.RED);
             }
             if (timeRemaining <= 0) {
@@ -73,7 +74,7 @@ public class DigitalTimer extends StackPane {
     }
 
     private void updateLabel() {
-        timerLabel.setText(String.format("%02d", timeRemaining));
+        timerLabel.setText(String.valueOf(timeRemaining));
     }
 
     public void setOnTimeOut(Runnable onTimeOut) {

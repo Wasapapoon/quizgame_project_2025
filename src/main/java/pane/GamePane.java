@@ -70,13 +70,13 @@ public class GamePane extends GridPane {
             String level = difficultyLevel.toUpperCase();
 
             if (((hasHint) question).getHint().size() == 3) {
-                if (currentTime <= 30 && hintTextList.size() > 0) {
+                if (currentTime <= 25 && hintTextList.size() > 0) {
                     hintTextList.get(0).setVisible(true);
                 }
-                if (currentTime <= 25 && hintTextList.size() > 1) {
+                if (currentTime <= 20 && hintTextList.size() > 1) {
                     hintTextList.get(1).setVisible(true);
                 }
-                if (currentTime <= 20 && hintTextList.size() > 2) {
+                if (currentTime <= 15 && hintTextList.size() > 2) {
                     hintTextList.get(2).setVisible(true);
                 }
             } else if (((hasHint) question).getHint().size() == 4) {

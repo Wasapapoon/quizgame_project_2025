@@ -29,8 +29,7 @@ public class ResultPane extends VBox {
         tryAgain.setPrefWidth(400);
         tryAgain.setPrefHeight(100);
         tryAgain.setOnMouseClicked(mouseEvent -> {
-            playerA.setHp(3);
-            playerB.setHp(3);
+            gameTimer.stop();
         	initQuiz(difficultyLevel);
         }); 
 
@@ -40,6 +39,8 @@ public class ResultPane extends VBox {
         exit.setPrefHeight(100);
         exit.setOnMouseClicked(mouseEvent -> {
 
+            gameTimer.stop();
+
             Stage stage = (Stage) getRootPane().getScene().getWindow();
             double width = stage.getWidth();
             double height = stage.getHeight();
@@ -47,9 +48,6 @@ public class ResultPane extends VBox {
             BackgroundImage homeBg = new BackgroundImage(
                 new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/puzzle_background2.png"))), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, false, false, false, false));
                 getRootPane().setBackground(new Background(homeBg));
-
-            playerA.setHp(3);
-            playerB.setHp(3);
 
             titleScreenPage();
         });

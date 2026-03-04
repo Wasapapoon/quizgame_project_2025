@@ -98,11 +98,15 @@ public class Goto {
     }
 
     public static void initQuiz(String difficultyLevel) {
-    	if (difficultyLevel.equals("EXTREME")) {
+    	if (difficultyLevel.equals("MIXED")) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/extreme_quiz.mp3")).toExternalForm());
         } else {
             music(Objects.requireNonNull(Goto.class.getResource("/music/quiz_music.mp3")).toExternalForm());
         }
+
+        player.setHp(3);
+        playerA.setHp(3);
+        playerB.setHp(3);
         
         questions.clear();
         
@@ -330,7 +334,6 @@ public class Goto {
 
         if (player.getHp() <= 0) {
             resultPage(difficultyLevel);
-            player.setHp(3);
         }
     }
 
@@ -353,9 +356,6 @@ public class Goto {
         questions.removeFirst();
         if (questions.isEmpty()) {
             resultPage(difficultyLevel);
-            player.setHp(3);
-            playerA.setHp(3);
-            playerB.setHp(3);
         } else{
             if(difficultyLevel.equals("MIXED")){
                 quizPage(difficultyLevel);
