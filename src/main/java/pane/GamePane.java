@@ -2,101 +2,97 @@ package pane;
 
 import item.base.BasePuzzle;
 import item.usage.hasHint;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import utils.Goto;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class GamePane extends GridPane {
 
+    private List<Text> hintTextList = new ArrayList<>();
+
     public GamePane(BasePuzzle question, String difficultyLevel) {
+
         Goto.initializeWindowSize(Goto.getRootPane());
         setPadding(new Insets(32, 0, 32, 0));
         setAlignment(Pos.CENTER);
 
-        int spacing = (question instanceof hasHint) ? 25 : 45;
-        HBox imagesBox = new HBox(spacing);
+        HBox imagesBox = new HBox(35);
         imagesBox.setAlignment(Pos.CENTER);
 
         List<String> pictures = question.getPictureNames();
+        List<String> hints = (question instanceof hasHint) ? ((hasHint) question).getHint() : null;
 
         if (pictures != null) {
             for (int i = 0; i < pictures.size(); i++) {
                 String fileName = pictures.get(i);
-                String path = "/" + fileName;
-                var resource = Goto.class.getResourceAsStream(path);
+                var resource = Goto.class.getResourceAsStream("/" + fileName);
 
                 if (resource != null) {
-                    final int index = i;
-                    VBox column = new VBox(10);
+                    VBox column = new VBox(15);
                     column.setAlignment(Pos.CENTER);
 
                     ImageView quizImg = new ImageView(new Image(resource));
                     quizImg.setPreserveRatio(true);
-                    if (question instanceof hasHint){
-                        quizImg.setFitWidth(240);
-                    }
-                    else {
-                        quizImg.setFitWidth(295);
-                    }
-
+                    quizImg.setFitWidth(240);
                     column.getChildren().add(quizImg);
 
-                    if (question instanceof hasHint) {
-                        Button hintBtn = new Button("Hint");
-                        hintBtn.setPrefWidth(90);
-                        hintBtn.setPrefHeight(35);
-                        hintBtn.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 14));
+                    if (question instanceof hasHint && hints != null && i < hints.size()) {
+                        Text hintDisplay = new Text("hint " + ": " + hints.get(i));
+                        hintDisplay.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 18));
+                        hintDisplay.setFill(Color.YELLOW);
+                        hintDisplay.setVisible(false);
 
-                        Image hintImage = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/hintback.png")));
-                        BackgroundImage bImg = new BackgroundImage(hintImage,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.CENTER,
-                                new BackgroundSize(100, 100, true, true, true, false));
-
-                        hintBtn.setBackground(new Background(bImg));
-
-                        hintBtn.setOnMouseEntered(e -> {
-                            Image hoverImage = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/hintback2.png")));
-                            hintBtn.setBackground(new Background(new BackgroundImage(hoverImage,
-                                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                                    new BackgroundSize(100, 100, true, true, true, false))));
-                            hintBtn.setTextFill(Color.WHITE);
-                        });
-
-                        hintBtn.setOnMouseExited(e -> {
-                            hintBtn.setBackground(new Background(bImg));
-                            hintBtn.setTextFill(Color.BLACK);
-                        });
-                        hintBtn.setOnAction(event -> {
-                            List<String> hints = ((hasHint) question).getHint();
-                            if (hints != null && index < hints.size()) {
-                                Goto.hintPage(question, difficultyLevel, index);
-                            }
-                        });
-
-                        column.getChildren().add(hintBtn);
+                        hintTextList.add(hintDisplay);
+                        column.getChildren().add(hintDisplay);
                     }
-
                     imagesBox.getChildren().add(column);
                 }
             }
         }
-
-
-        imagesBox.setAlignment(Pos.CENTER);
         getChildren().add(imagesBox);
+    }
 
+    public void updateHintsByTime(int currentTime, BasePuzzle question, String difficultyLevel) {
+        if (!(question instanceof hasHint) || hintTextList.isEmpty()) return;
 
+        Platform.runLater(() -> {
+
+            String level = difficultyLevel.toUpperCase();
+
+            if (level.equals("MEDIUM")) {
+                if (currentTime <= 30 && hintTextList.size() > 0) {
+                    hintTextList.get(0).setVisible(true);
+                }
+                if (currentTime <= 25 && hintTextList.size() > 1) {
+                    hintTextList.get(1).setVisible(true);
+                }
+                if (currentTime <= 20 && hintTextList.size() > 2) {
+                    hintTextList.get(2).setVisible(true);
+                }
+            } else if (level.equals("HARD")) {
+                if (currentTime <= 35 && hintTextList.size() > 0) {
+                    hintTextList.get(0).setVisible(true);
+                }
+                if (currentTime <= 30 && hintTextList.size() > 1) {
+                    hintTextList.get(1).setVisible(true);
+                }
+                if (currentTime <= 25 && hintTextList.size() > 2) {
+                    hintTextList.get(2).setVisible(true);
+                }
+                if (currentTime <= 20 && hintTextList.size() > 3) {
+                    hintTextList.get(3).setVisible(true);
+                }
+            }
+        });
     }
 }

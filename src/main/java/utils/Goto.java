@@ -177,7 +177,6 @@ public class Goto {
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.TOP_RIGHT);
         hBox.setPadding(new Insets(20, 20, 0, 0));
-
         rootPane.getChildren().add(hBox);
 
         HBox topStatus = new HBox();
@@ -190,16 +189,21 @@ public class Goto {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+        BasePuzzle currentQuestion = questions.getFirst();
+        GamePane gamePane = new GamePane(currentQuestion, difficultyLevel);
+
         topStatus.getChildren().addAll(playerALife, spacer, playerBLife);
         rootPane.getChildren().add(topStatus);
-        gameTimer.setAlignment(Pos.CENTER);
-        rootPane.getChildren().add(gameTimer);
-        VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
-        gameTimer.start(questions.getFirst().getTimeLimit());
 
-        GamePane quizPane = new GamePane(questions.getFirst(), difficultyLevel);
-        VBox.setVgrow(quizPane, Priority.ALWAYS);
-        rootPane.getChildren().add(quizPane);
+        gameTimer.setAlignment(Pos.CENTER);
+        gameTimer.setGameContext(gamePane, currentQuestion, difficultyLevel);
+        rootPane.getChildren().add(gameTimer);
+
+        VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
+        gameTimer.start(currentQuestion.getTimeLimit());
+
+        VBox.setVgrow(gamePane, Priority.ALWAYS);
+        rootPane.getChildren().add(gamePane);
 
         HBox inputContainer = new HBox(80);
         inputContainer.setAlignment(Pos.CENTER);
@@ -214,14 +218,6 @@ public class Goto {
         inputContainer.getChildren().addAll(textPane1, textPane2);
         rootPane.getChildren().add(inputContainer);
 
-        gameTimer.setOnTimeOut(() -> {
-            System.out.println("Time's up!");
-        });
-    }
-
-    public static void hintPage(BasePuzzle question, String difficultyLevel, int index) {
-        clear();
-        rootPane.getChildren().add(new HintPane(question, difficultyLevel, index));
     }
 
 
