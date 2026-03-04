@@ -1,7 +1,5 @@
 package pane;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 import javafx.geometry.Insets;
@@ -18,16 +16,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import mode.DifficultyLevel;
-import mode.GameLevelSelector;
+import mode.GameMode;
+import mode.GameModeSelector;
 import utils.Goto;
 
-public class LevelSelectionPane extends VBox {
-    private static GameLevelSelector gameLevelSelector;
+public class ModeSelectionPane extends VBox {
+    private static GameModeSelector gameModeSelector;
     private static Boolean backButtonClicked = false;
     
-    public LevelSelectionPane(GameLevelSelector gameLevelSelector) {
-        this.gameLevelSelector = gameLevelSelector;
+    public ModeSelectionPane(GameModeSelector gameModeSelector) {
+        this.gameModeSelector = gameModeSelector;
 
         setSpacing(20);
         setAlignment(Pos.CENTER);
@@ -37,34 +35,31 @@ public class LevelSelectionPane extends VBox {
         buttonContainer.setAlignment(Pos.CENTER);
         VBox.setMargin(buttonContainer, new Insets(50,0,0,0));
 
-        Button easyButton = createDifficultyButton("Easy", DifficultyLevel.EASY);
-        Button mediumButton = createDifficultyButton("Medium", DifficultyLevel.MEDIUM);
-        Button hardButton = createDifficultyButton("Hard", DifficultyLevel.HARD);
-        Button mixedButton = createDifficultyButton("Battle", DifficultyLevel.MIXED);
-        Button extremeButton = createDifficultyButton("Extreme", DifficultyLevel.EXTREME);
+        Button easyButton = createDifficultyButton("Easy", GameMode.EASY);
+        Button mediumButton = createDifficultyButton("Medium", GameMode.MEDIUM);
+        Button hardButton = createDifficultyButton("Hard", GameMode.HARD);
+        Button battleButton = createDifficultyButton("Battle", GameMode.BATTLE);
 
 
         easyButton.setPrefWidth(400);
         mediumButton.setPrefWidth(400);
         hardButton.setPrefWidth(400);
-        mixedButton.setPrefWidth(400);
-        extremeButton.setPrefWidth(400);
+        battleButton.setPrefWidth(400);
         
         easyButton.setPrefHeight(110);
         mediumButton.setPrefHeight(110);
         hardButton.setPrefHeight(110);
-        mixedButton.setPrefHeight(110);
-        extremeButton.setPrefHeight(110);
+        battleButton.setPrefHeight(110);
 
         Text text = new Text("Select Difficulty Level");
         text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 45));
         text.setFill(Color.WHITE);
         
-        buttonContainer.getChildren().addAll(easyButton, mediumButton, hardButton, mixedButton);
+        buttonContainer.getChildren().addAll(easyButton, mediumButton, hardButton, battleButton);
         getChildren().addAll(text, buttonContainer, createBackButton());
     }
 
-    private Button createDifficultyButton(String text, DifficultyLevel difficulty) {
+    private Button createDifficultyButton(String text, GameMode difficulty) {
         Button button = new Button(text);
         button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 25));
         button.setPrefWidth(120);
@@ -76,8 +71,8 @@ public class LevelSelectionPane extends VBox {
         button.setOnMouseExited(e -> button.setStyle("-fx-background-color: lightgray;"));
 
         button.setOnAction(e -> {
-            gameLevelSelector.setDifficultyLevel(difficulty);
-            gameLevelSelector.startGame(); 
+            gameModeSelector.setDifficultyLevel(difficulty);
+            gameModeSelector.startGame();
             setBackButtonClicked(false);
         });
 
@@ -122,7 +117,7 @@ public class LevelSelectionPane extends VBox {
 	}
 
 	public static void setBackButtonClicked(Boolean backButtonClicked) {
-		LevelSelectionPane.backButtonClicked = backButtonClicked;
+		ModeSelectionPane.backButtonClicked = backButtonClicked;
 	}
     
 

@@ -20,12 +20,12 @@ import utils.Goto;
 import java.util.Objects;
 
 public class TextPane extends VBox {
-    private String difficultyLevel;
+    private String gameMode;
 
     private TextField textField = new TextField();
 
-    public TextPane(String difficultyLevel, String playerLabelText, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
-        this.difficultyLevel = difficultyLevel;
+    public TextPane(String gameMode, String playerLabelText, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
+        this.gameMode = gameMode;
         setAlignment(Pos.CENTER);
 
         Label playerLabel = new Label(playerLabelText);
@@ -66,7 +66,7 @@ public class TextPane extends VBox {
         });
 
         button.setOnAction(actionEvent -> {
-            boolean checkAnswer = Goto.checkAnswer(textField.getText(), difficultyLevel, currentPlayer, opponentPlayer, opponentLifePane);
+            boolean checkAnswer = Goto.checkAnswer(textField.getText(), gameMode, currentPlayer, opponentPlayer, opponentLifePane);
             textField.setBackground(new Background(new BackgroundFill(checkAnswer ? Color.GREEN : Color.RED, new CornerRadii(5), Insets.EMPTY)));
 
             String soundPath = checkAnswer ? "/sound/correct.mp3" : "/sound/wrong.mp3";
@@ -84,18 +84,18 @@ public class TextPane extends VBox {
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         new BackgroundSize(100, 100, true, true, true, false))));
 
-                if (difficultyLevel.equals("EXTREME")) {
+                if (gameMode.equals("EXTREME")) {
                     if (!checkAnswer) {
-                        Goto.resultPage(difficultyLevel);
+                        Goto.resultPage(gameMode);
                     } else {
-                        Goto.checkQuiz(difficultyLevel);
+                        Goto.checkQuiz(gameMode);
                     }
                 } else {
                     if (checkAnswer){
-                        Goto.checkQuiz(difficultyLevel);
+                        Goto.checkQuiz(gameMode);
                     }
                     else {
-                        if(difficultyLevel.equals("MIXED")){
+                        if(gameMode.equals("BATTLE")){
                             textField.setDisable(true);
                         }
                     }

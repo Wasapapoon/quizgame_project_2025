@@ -15,10 +15,10 @@ import java.util.Objects;
 import static utils.Goto.*;
 
 public class ResultPane extends VBox {
-    private String difficultyLevel; 
+    private String gameMode;
     
-    public ResultPane(String difficultyLevel) {
-        this.difficultyLevel = difficultyLevel; 
+    public ResultPane(String gameMode) {
+        this.gameMode = gameMode;
         initializeWindowSize(getRootPane());
         setAlignment(Pos.CENTER);
         setSpacing(20);
@@ -30,7 +30,7 @@ public class ResultPane extends VBox {
         tryAgain.setPrefHeight(100);
         tryAgain.setOnMouseClicked(mouseEvent -> {
             gameTimer.stop();
-        	initQuiz(difficultyLevel);
+        	initQuiz(gameMode);
         }); 
 
         Button exit = new Button("Return");

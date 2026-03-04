@@ -20,7 +20,7 @@ public class GamePane extends GridPane {
 
     private List<Text> hintTextList = new ArrayList<>();
 
-    public GamePane(BasePuzzle question, String difficultyLevel) {
+    public GamePane(BasePuzzle question, String gameMode) {
 
         Goto.initializeWindowSize(Goto.getRootPane());
         setPadding(new Insets(32, 0, 32, 0));
@@ -62,12 +62,12 @@ public class GamePane extends GridPane {
         getChildren().add(imagesBox);
     }
 
-    public void updateHintsByTime(int currentTime, BasePuzzle question, String difficultyLevel) {
+    public void updateHintsByTime(int currentTime, BasePuzzle question, String gameMode) {
         if (!(question instanceof hasHint) || hintTextList.isEmpty()) return;
 
         Platform.runLater(() -> {
 
-            String level = difficultyLevel.toUpperCase();
+            String level = gameMode.toUpperCase();
 
             if (((hasHint) question).getHint().size() == 3) {
                 if (currentTime <= 25 && hintTextList.size() > 0) {

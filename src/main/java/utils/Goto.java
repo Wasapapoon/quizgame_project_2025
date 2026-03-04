@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import mode.GameLevelSelector;
+import mode.GameModeSelector;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -91,14 +91,14 @@ public class Goto {
 
     public static void titleScreenPage(){
         clear();
-        if (!LevelSelectionPane.getBackButtonClicked()) {
+        if (!ModeSelectionPane.getBackButtonClicked()) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/title_screen_music.mp3")).toExternalForm());
         }
         rootPane.getChildren().add(new TitleScreenPane());  
     }
 
-    public static void initQuiz(String difficultyLevel) {
-    	if (difficultyLevel.equals("MIXED")) {
+    public static void initQuiz(String gameMode) {
+    	if (gameMode.equals("BATTLE")) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/extreme_quiz.mp3")).toExternalForm());
         } else {
             music(Objects.requireNonNull(Goto.class.getResource("/music/quiz_music.mp3")).toExternalForm());
@@ -116,7 +116,7 @@ public class Goto {
         ArrayList<BasePuzzle> MixedLevelQuestion = new ArrayList<>();
         ArrayList<BasePuzzle> ExtremeLevelQuestion = new ArrayList<>();
 
-        switch (difficultyLevel) {
+        switch (gameMode) {
             case "EASY" -> {
                easyLevelQuestion.add(new Easy("บางพลัด", List.of("easy1_1.png", "easy1_2.jpeg")));
                easyLevelQuestion.add(new Easy( "ฮ่องเต้", List.of("easy2_1.png", "easy2_2.png")));
@@ -125,7 +125,7 @@ public class Goto {
 
                Collections.shuffle(easyLevelQuestion);
                questions.addAll(easyLevelQuestion);
-               singlePlayerPage(difficultyLevel);
+               singlePlayerPage(gameMode);
             }
             case "MEDIUM" -> {
                 MediumLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
@@ -135,7 +135,7 @@ public class Goto {
 
                 Collections.shuffle(MediumLevelQuestion);
                 questions.addAll(MediumLevelQuestion);
-                singlePlayerPage(difficultyLevel);
+                singlePlayerPage(gameMode);
             }
             case "HARD" -> {
                 HardLevelQuestion.add(new Hard( "กินก๋วยเตี๋ยวหกคน", List.of("hard1_1.png", "hard1_2.jpg", "hard1_3.png", "hard1_4.png"),List.of("ตัวอักษร","ตัวอักษร","ตัวอักษร","ตัวอักษร")));
@@ -144,7 +144,7 @@ public class Goto {
 
                 Collections.shuffle(HardLevelQuestion);
                 questions.addAll(HardLevelQuestion);
-                singlePlayerPage(difficultyLevel);
+                singlePlayerPage(gameMode);
             }
             case "MIXED" -> {
                 MixedLevelQuestion.add(new Easy( "ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
@@ -155,7 +155,7 @@ public class Goto {
 
                 Collections.shuffle(MixedLevelQuestion);
                 questions.addAll(MixedLevelQuestion);
-                quizPage(difficultyLevel);
+                quizPage(gameMode);
             }
             default -> {
                 ExtremeLevelQuestion.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
@@ -168,12 +168,12 @@ public class Goto {
 
                 Collections.shuffle(ExtremeLevelQuestion);
                 questions.addAll(ExtremeLevelQuestion);
-                quizPage(difficultyLevel);
+                quizPage(gameMode);
             }
         }
     }
 
-    public static void quizPage(String difficultyLevel) {
+    public static void quizPage(String gameMode) {
         clear();
 
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -203,13 +203,13 @@ public class Goto {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         BasePuzzle currentQuestion = questions.getFirst();
-        GamePane gamePane = new GamePane(currentQuestion, difficultyLevel);
+        GamePane gamePane = new GamePane(currentQuestion, gameMode);
 
         topStatus.getChildren().addAll(playerALife, spacer, playerBLife);
         rootPane.getChildren().add(topStatus);
 
         gameTimer.setAlignment(Pos.CENTER);
-        gameTimer.setGameContext(gamePane, currentQuestion, difficultyLevel);
+        gameTimer.setGameContext(gamePane, currentQuestion, gameMode);
         rootPane.getChildren().add(gameTimer);
 
         VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
@@ -222,8 +222,8 @@ public class Goto {
         inputContainer.setAlignment(Pos.CENTER);
         inputContainer.setPadding(new Insets(0, 60, 50, 60));
 
-        TextPane textPane1 = new TextPane(difficultyLevel, "PLAYER A INPUT", playerA, playerB, playerBLife);
-        TextPane textPane2 = new TextPane(difficultyLevel, "PLAYER B INPUT", playerB, playerA, playerALife);
+        TextPane textPane1 = new TextPane(gameMode, "PLAYER A INPUT", playerA, playerB, playerBLife);
+        TextPane textPane2 = new TextPane(gameMode, "PLAYER B INPUT", playerB, playerA, playerALife);
 
         HBox.setHgrow(textPane1, Priority.ALWAYS);
         HBox.setHgrow(textPane2, Priority.ALWAYS);
@@ -258,7 +258,7 @@ public class Goto {
 
                     if (event.getCode() == KeyCode.RIGHT) {
                         event.consume();
-                        checkQuiz(difficultyLevel);
+                        checkQuiz(gameMode);
                     }
                 };
                 scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
@@ -271,18 +271,18 @@ public class Goto {
             playerALife.updateHazardDisplay();
             playerBLife.updateHazardDisplay();
 
-            checkQuiz(difficultyLevel);
+            checkQuiz(gameMode);
         });
 
         if (playerA.getHp() <= 0 || playerB.getHp() <= 0) {
-            resultPage(difficultyLevel);
+            resultPage(gameMode);
             playerA.setHp(3);
             playerB.setHp(3);
         }
 
     }
 
-    public static void singlePlayerPage(String difficultyLevel) {
+    public static void singlePlayerPage(String gameMode) {
         clear();
 
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -305,10 +305,10 @@ public class Goto {
         rootPane.getChildren().add(topStatus);
 
         BasePuzzle currentQuestion = questions.getFirst();
-        GamePane gamePane = new GamePane(currentQuestion, difficultyLevel);
+        GamePane gamePane = new GamePane(currentQuestion, gameMode);
 
         gameTimer.setAlignment(Pos.CENTER);
-        gameTimer.setGameContext(gamePane, currentQuestion, difficultyLevel);
+        gameTimer.setGameContext(gamePane, currentQuestion, gameMode);
         rootPane.getChildren().add(gameTimer);
 
         VBox.setMargin(gameTimer, new Insets(-120, 0, 0, 0));
@@ -321,7 +321,7 @@ public class Goto {
         inputContainer.setAlignment(Pos.CENTER);
         inputContainer.setPadding(new Insets(0, 0, 50, 0));
 
-        TextPane textPane = new TextPane(difficultyLevel, "YOUR INPUT", player, null, playerLife);
+        TextPane textPane = new TextPane(gameMode, "YOUR INPUT", player, null, playerLife);
         HBox.setHgrow(textPane, Priority.ALWAYS);
         inputContainer.getChildren().add(textPane);
         rootPane.getChildren().add(inputContainer);
@@ -329,19 +329,19 @@ public class Goto {
         gameTimer.setOnTimeOut(() -> {
             player.setHp(player.getHp() - 1);
             playerLife.updateHazardDisplay();
-            checkQuiz(difficultyLevel);
+            checkQuiz(gameMode);
         });
 
         if (player.getHp() <= 0) {
-            resultPage(difficultyLevel);
+            resultPage(gameMode);
         }
     }
 
 
-    public static Boolean checkAnswer(String choice, String difficultyLevel, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
+    public static Boolean checkAnswer(String choice, String gameMode, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         Boolean isCorrect = choice.equals(questions.getFirst().getAnswer());
 
-        if(difficultyLevel.equals("MIXED")){
+        if(gameMode.equals("BATTLE")){
             if (isCorrect) {
                 opponentLifePane.reduceHP();
             }
@@ -351,17 +351,17 @@ public class Goto {
     }
 
 
-    public static void checkQuiz(String difficultyLevel) { 
+    public static void checkQuiz(String gameMode) {
         clear();
         questions.removeFirst();
         if (questions.isEmpty()) {
-            resultPage(difficultyLevel);
+            resultPage(gameMode);
         } else{
-            if(difficultyLevel.equals("MIXED")){
-                quizPage(difficultyLevel);
+            if(gameMode.equals("BATTLE")){
+                quizPage(gameMode);
             }
             else{
-                singlePlayerPage(difficultyLevel);
+                singlePlayerPage(gameMode);
             }
 
 
@@ -369,7 +369,7 @@ public class Goto {
     }
 
 
-    public static void resultPage(String difficultyLevel) {
+    public static void resultPage(String gameMode) {
         clear();
 
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -377,7 +377,7 @@ public class Goto {
         double height = stage.getHeight();
 
         String winBgPath;
-        if(difficultyLevel.equals("MIXED")){
+        if(gameMode.equals("BATTLE")){
             if (playerA.getHp() > playerB.getHp()) {
                 winBgPath = "/playerA_win.png";
             } else if (playerB.getHp() > playerA.getHp()) {
@@ -408,13 +408,13 @@ public class Goto {
 
         music(Objects.requireNonNull(Goto.class.getResource("/music/score_music.mp3")).toExternalForm());
 
-        rootPane.getChildren().add(new ResultPane(difficultyLevel));
+        rootPane.getChildren().add(new ResultPane(gameMode));
     }
     
-    public static void levelSelectionPage(GameLevelSelector gameLevelSelector) {
+    public static void levelSelectionPage(GameModeSelector gameModeSelector) {
     	clear();
     	
-    	rootPane.getChildren().add(new LevelSelectionPane(gameLevelSelector));
+    	rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
     }
 
 	public static double getWindowWidth() {

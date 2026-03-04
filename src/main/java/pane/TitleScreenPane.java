@@ -10,20 +10,18 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import mode.GameLevelSelector;
+import mode.GameModeSelector;
 import utils.Goto;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class TitleScreenPane extends VBox { 
     private Button playButton;
-    private GameLevelSelector gameLevelSelector; 
+    private GameModeSelector gameModeSelector;
 
     public TitleScreenPane() {
         setAlignment(Pos.CENTER);
-        gameLevelSelector = new GameLevelSelector();
+        gameModeSelector = new GameModeSelector();
 
 
         Image logoImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/logo.PNG")));
@@ -47,7 +45,7 @@ public class TitleScreenPane extends VBox {
         playButton.setPrefWidth(400);
         playButton.setPrefHeight(100);
         playButton.setOnMouseClicked(e -> {
-            Goto.levelSelectionPage(gameLevelSelector);
+            Goto.levelSelectionPage(gameModeSelector);
         });
         playButton.setBackground(new Background(new BackgroundFill(Color.GREENYELLOW , CornerRadii.EMPTY, Insets.EMPTY)));
         VBox.setMargin(playButton, new Insets(60,0,0,0));
