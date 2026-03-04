@@ -50,6 +50,7 @@ public class LifePane extends VBox {
                 hearts.get(i).setVisible(true);
             } else {
                 hearts.get(i).setVisible(false);
+                hearts.get(i).setManaged(false);
             }
         }
     }

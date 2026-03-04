@@ -51,7 +51,7 @@ public class ModeSelectionPane extends VBox {
         hardButton.setPrefHeight(110);
         battleButton.setPrefHeight(110);
 
-        Text text = new Text("Select Difficulty Level");
+        Text text = new Text("Select Mode");
         text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 45));
         text.setFill(Color.WHITE);
         

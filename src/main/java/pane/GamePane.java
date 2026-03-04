@@ -43,7 +43,13 @@ public class GamePane extends GridPane {
 
                     ImageView quizImg = new ImageView(new Image(resource));
                     quizImg.setPreserveRatio(true);
-                    quizImg.setFitWidth(240);
+                    if(question instanceof hasHint){
+                        quizImg.setFitWidth(240);
+                    }
+                    else {
+                        quizImg.setFitWidth(280);
+                    }
+
                     column.getChildren().add(quizImg);
 
                     if (question instanceof hasHint && hints != null && i < hints.size()) {
