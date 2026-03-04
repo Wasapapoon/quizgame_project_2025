@@ -69,7 +69,7 @@ public class GamePane extends GridPane {
 
             String level = difficultyLevel.toUpperCase();
 
-            if (level.equals("MEDIUM")) {
+            if (((hasHint) question).getHint().size() == 3) {
                 if (currentTime <= 30 && hintTextList.size() > 0) {
                     hintTextList.get(0).setVisible(true);
                 }
@@ -79,7 +79,7 @@ public class GamePane extends GridPane {
                 if (currentTime <= 20 && hintTextList.size() > 2) {
                     hintTextList.get(2).setVisible(true);
                 }
-            } else if (level.equals("HARD")) {
+            } else if (((hasHint) question).getHint().size() == 4) {
                 if (currentTime <= 35 && hintTextList.size() > 0) {
                     hintTextList.get(0).setVisible(true);
                 }

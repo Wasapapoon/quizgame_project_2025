@@ -5,7 +5,12 @@ import item.base.BasePuzzle;
 import item.level.Easy;
 import item.level.Hard;
 import item.level.Medium;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -36,6 +41,8 @@ public class Goto {
     public static Player playerB = new Player("PLAYER B");
 
     public static DigitalTimer gameTimer = new DigitalTimer();
+
+    private static EventHandler<KeyEvent> currentFilter;
     
     private static double windowWidth ;
     
@@ -219,6 +226,40 @@ public class Goto {
 
         inputContainer.getChildren().addAll(textPane1, textPane2);
         rootPane.getChildren().add(inputContainer);
+
+        textPane1.getTextField().setDisable(true);
+        textPane2.getTextField().setDisable(true);
+
+        Platform.runLater(() -> {
+            Scene scene = rootPane.getScene();
+            if (scene != null) {
+                if (currentFilter != null) {
+                    scene.removeEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+                }
+
+                currentFilter = event -> {
+                    if (textPane1.getTextField().isDisable() && textPane2.getTextField().isDisable()) {
+                        if (event.getCode() == KeyCode.TAB) {
+                            textPane1.getTextField().setDisable(false);
+                            textPane2.getTextField().setDisable(true);
+                            textPane1.getTextField().requestFocus();
+                            event.consume();
+                        } else if (event.getCode() == KeyCode.ENTER) {
+                            textPane2.getTextField().setDisable(false);
+                            textPane1.getTextField().setDisable(true);
+                            textPane2.getTextField().requestFocus();
+                            event.consume();
+                        }
+                    }
+
+                    if (event.getCode() == KeyCode.RIGHT) {
+                        event.consume();
+                        checkQuiz(difficultyLevel);
+                    }
+                };
+                scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+            }
+        });
 
     }
 

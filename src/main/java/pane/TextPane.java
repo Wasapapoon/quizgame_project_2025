@@ -22,6 +22,8 @@ import java.util.Objects;
 public class TextPane extends VBox {
     private String difficultyLevel;
 
+    private TextField textField = new TextField();
+
     public TextPane(String difficultyLevel, String playerLabelText, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         this.difficultyLevel = difficultyLevel;
         setAlignment(Pos.CENTER);
@@ -30,7 +32,6 @@ public class TextPane extends VBox {
         playerLabel.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 24));
         playerLabel.setTextFill(Color.WHITE);
 
-        TextField textField = new TextField();
         textField.setPromptText("ตอบเป็นภาษาไทย");
         textField.setPrefWidth(400);
         textField.setMaxWidth(550);
@@ -79,6 +80,10 @@ public class TextPane extends VBox {
 
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             pause.setOnFinished(event -> {
+                textField.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/textback.png"))),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(100, 100, true, true, true, false))));
+
                 if (difficultyLevel.equals("EXTREME")) {
                     if (!checkAnswer) {
                         Goto.resultPage(difficultyLevel);
@@ -86,12 +91,24 @@ public class TextPane extends VBox {
                         Goto.checkQuiz(difficultyLevel);
                     }
                 } else {
-                    Goto.checkQuiz(difficultyLevel);
+                    if (checkAnswer){
+                        Goto.checkQuiz(difficultyLevel);
+                    }
+                    else {
+                        if(difficultyLevel.equals("MIXED")){
+                            textField.setDisable(true);
+                        }
+                    }
+
                 }
             });
             pause.play();
         });
 
         getChildren().addAll(playerLabel, textField, button);
+    }
+
+    public TextField getTextField() {
+        return textField;
     }
 }
