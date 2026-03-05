@@ -20,10 +20,23 @@ import mode.GameMode;
 import mode.GameModeSelector;
 import utils.Goto;
 
+/**
+ * ModeSelectionPane is a UI component that provides the interface for players
+ * to select their desired game mode (EASY, MEDIUM, HARD, or BATTLE).
+ * It manages the transition from the menu to the actual gameplay.
+ */
 public class ModeSelectionPane extends VBox {
+
+    /** Reference to the GameModeSelector to handle mode logic and start the game. */
     private static GameModeSelector gameModeSelector;
+
+    /** Flag to track if the back button has been clicked to return to the title screen. */
     private static Boolean backButtonClicked = false;
-    
+
+    /**
+     * Constructs the ModeSelectionPane layout, including mode buttons and a back button.
+     * @param gameModeSelector The selector object used to set difficulty and start the game.
+     */
     public ModeSelectionPane(GameModeSelector gameModeSelector) {
         this.gameModeSelector = gameModeSelector;
 
@@ -59,6 +72,13 @@ public class ModeSelectionPane extends VBox {
         getChildren().addAll(text, buttonContainer, createBackButton());
     }
 
+    /**
+     * Creates a styled button for a specific game difficulty or mode.
+     * Sets up hover effects and the action to start the game when clicked.
+     * @param text The text to be displayed on the button.
+     * @param difficulty The GameMode associated with this button.
+     * @return A configured Button object.
+     */
     private Button createDifficultyButton(String text, GameMode difficulty) {
         Button button = new Button(text);
         button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 25));
@@ -78,7 +98,12 @@ public class ModeSelectionPane extends VBox {
 
         return button;
     }
-    
+
+    /**
+     * Creates a "Back" button with custom background images and hover effects.
+     * When clicked, it sets the backButtonClicked flag and returns to the title screen.
+     * @return A styled Back button.
+     */
     private Button createBackButton() {
     	Button back = new Button("Back");
         back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
@@ -112,10 +137,12 @@ public class ModeSelectionPane extends VBox {
         return back;
     }
 
+    /** @return True if the back button was clicked, otherwise false. */
 	public static Boolean getBackButtonClicked() {
 		return backButtonClicked;
 	}
 
+    /** @param backButtonClicked State of the back button interaction. */
 	public static void setBackButtonClicked(Boolean backButtonClicked) {
 		ModeSelectionPane.backButtonClicked = backButtonClicked;
 	}

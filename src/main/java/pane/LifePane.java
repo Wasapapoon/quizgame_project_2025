@@ -16,10 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * LifePane is a UI component that displays the player's name and their remaining health points (HP).
+ * It uses heart icons to visually represent the player's current status in the game.
+ */
 public class LifePane extends VBox {
+
+    /** A list containing the ImageView objects for each heart icon shown on the screen. */
     private List<ImageView> hearts = new ArrayList<>();
+
+    /** The player associated with this life display */
     private Player player;
 
+    /**
+     * Constructs a LifePane for the specified player, initializing their name display
+     * and setting up the initial three-heart health bar.
+     * @param player The player object whose name and HP will be monitored and displayed.
+     */
     public LifePane(Player player) {
         this.player = player;
         setSpacing(10);
@@ -44,6 +57,10 @@ public class LifePane extends VBox {
         getChildren().addAll(nameLabel, heartsBox);
     }
 
+    /**
+     * Synchronizes the visual heart icons with the player's actual HP.
+     * Hearts are hidden or removed from the layout when the player loses health.
+     */
     public void updateHazardDisplay() {
         for (int i = 0; i < hearts.size(); i++) {
             if (i < player.getHp()) {
@@ -55,6 +72,10 @@ public class LifePane extends VBox {
         }
     }
 
+    /**
+     * Decreases the player's HP by one and immediately updates the visual heart display.
+     * This method is typically called when a player misses a question or time runs out.
+     */
     public void reduceHP() {
         player.reduceHp();
         updateHazardDisplay();

@@ -19,11 +19,33 @@ import utils.Goto;
 
 import java.util.Objects;
 
+/**
+ * The TextPane class provides a user interface component for players to input their answers.
+ * It handles answer validation, visual feedback through color changes, sound effects,
+ * and controls the game flow based on whether the answer is correct or incorrect.
+ */
 public class TextPane extends VBox {
+
+    /** * The current game mode (e.g., EASY, MEDIUM, HARD, BATTLE, or EXTREME)
+     * which determines the specific game logic and transition rules.
+     */
     private String gameMode;
 
+    /** * The input field where the player types their answer.
+     */
     private TextField textField = new TextField();
 
+
+    /**
+     * Constructs a TextPane and initializes the UI layout including the player label,
+     * text input field with a custom background, and the submit button.
+     * It sets up event handlers for mouse interactions and answer submission logic.
+     * @param gameMode The current difficulty or competition mode.
+     * @param playerLabelText The text to display identifying the player (e.g., "PLAYER A INPUT").
+     * @param currentPlayer The player object who is currently using this input pane.
+     * @param opponentPlayer The opposing player object, used for HP deduction in battle mode.
+     * @param opponentLifePane The UI component representing the opponent's health, updated upon correct answers.
+     */
     public TextPane(String gameMode, String playerLabelText, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         this.gameMode = gameMode;
         setAlignment(Pos.CENTER);
@@ -108,6 +130,11 @@ public class TextPane extends VBox {
         getChildren().addAll(playerLabel, textField, button);
     }
 
+    /**
+     * Provides access to the TextField component used for player input.
+     * This is useful for programmatically focusing the field or clearing text.
+     * @return The TextField instance used in this pane.
+     */
     public TextField getTextField() {
         return textField;
     }
