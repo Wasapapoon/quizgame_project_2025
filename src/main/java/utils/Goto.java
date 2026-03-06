@@ -85,28 +85,6 @@ public class Goto {
         return customPuzzles.removeIf(p -> p.id == id);
     }
 
-    public static List<String> getCustomPuzzleDisplayList() {
-        ArrayList<String> rows = new ArrayList<>();
-        for (CustomPuzzleEntry e : customPuzzles) {
-            int imgCount = (e.puzzle.getPictureNames() == null) ? 0 : e.puzzle.getPictureNames().size();
-            rows.add("#" + e.id + " | " + e.difficulty + " | answer: " + e.puzzle.getAnswer() + " | images: " + imgCount);
-        }
-        return rows;
-    }
-
-    public static long parseCustomPuzzleIdFromDisplayRow(String row) {
-        if (row == null) return -1;
-        int hash = row.indexOf('#');
-        int space = row.indexOf(' ', hash);
-        if (hash < 0 || space < 0) return -1;
-        String idStr = row.substring(hash + 1, space).trim();
-        try {
-            return Long.parseLong(idStr);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
-
     private static List<BasePuzzle> getCustomPuzzlesForMode(String gameMode) {
         ArrayList<BasePuzzle> result = new ArrayList<>();
         for (CustomPuzzleEntry e : customPuzzles) {
@@ -396,7 +374,7 @@ public class Goto {
             checkQuiz(gameMode);
         });
 
-        if (playerA.getHp() <= 0 || playerB.getHp() <= 0) {
+        if (playerA.isDead() || playerB.isDead()) {
             resultPage(gameMode);
             playerA.setHp(3);
             playerB.setHp(3);
@@ -475,7 +453,7 @@ public class Goto {
             checkQuiz(gameMode);
         });
 
-        if (player.getHp() <= 0) {
+        if (player.isDead()) {
             resultPage(gameMode);
         }
     }
@@ -545,7 +523,7 @@ public class Goto {
             }
         }
         else{
-            if (player.getHp() > 0){
+            if (!player.isDead()){
                 winBgPath = "/you_win.png";
             }
             else{
@@ -565,6 +543,14 @@ public class Goto {
         rootPane.setBackground(new Background(bgImg));
 
         music(Objects.requireNonNull(Goto.class.getResource("/music/score_music.mp3")).toExternalForm());
+        
+        Platform.runLater(() -> {
+            Scene scene = rootPane.getScene();
+            if (scene != null && currentFilter != null) {
+                scene.removeEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+                currentFilter = null;
+            }
+        });
 
         rootPane.getChildren().add(new ResultPane(gameMode));
     }

@@ -8,13 +8,7 @@ import java.util.List;
  * that can be revealed to the player during a game session.
  */
 public interface hasHint {
-
-    /**
-     * Checks if the puzzle instance supports the hint system.
-     * @return True if hints are available for this puzzle, otherwise false.
-     */
-	boolean getHasHint();
-
+    
     /**
      * Sets or updates the collection of textual hints for the puzzle.
      * @param hint A list of strings representing the clues to be displayed.

@@ -164,20 +164,23 @@ public class CustomPuzzlePane extends VBox {
 
             List<File> files = chooser.showOpenMultipleDialog(getScene().getWindow());
             if (files != null) {
+                GameMode currentDifficulty = difficultyBox.getValue();
+                int required = switch (currentDifficulty) {
+                    case EASY -> 2;
+                    case MEDIUM -> 3;
+                    case HARD -> 4;
+                    default -> 0;
+                };
+
                 for (File f : files) {
+                    if (selectedImages.size() >= required) {
+                        statusLabel.setText("You can only add " + required + " images for " + currentDifficulty + " difficulty.");
+                        break;
+                    }
                     String path = f.getAbsolutePath();
-                    boolean exists = false;
-                    for (ImageHintBox box : selectedImages) {
-                        if (box.path.equals(path)) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (!exists) {
-                        ImageHintBox box = new ImageHintBox(path);
-                        selectedImages.add(box);
-                        addImageToGallery(imageGallery, selectedImages, box);
-                    }
+                    ImageHintBox box = new ImageHintBox(path);
+                    selectedImages.add(box);
+                    addImageToGallery(imageGallery, selectedImages, box);
                 }
             }
         });
@@ -191,8 +194,15 @@ public class CustomPuzzlePane extends VBox {
                 statusLabel.setText("Please enter an answer.");
                 return;
             }
-            if (selectedImages.isEmpty()) {
-                statusLabel.setText("Please choose at least 1 image.");
+            int requiredImages = switch (difficulty) {
+                case EASY -> 2;
+                case MEDIUM -> 3;
+                case HARD -> 4;
+                default -> 0;
+            };
+
+            if (selectedImages.size() != requiredImages) {
+                statusLabel.setText("Please choose exactly " + requiredImages + " images for " + difficulty + " difficulty.");
                 return;
             }
 
@@ -224,6 +234,12 @@ public class CustomPuzzlePane extends VBox {
         HBox actionButtons = new HBox(20, saveButton, cancelButton);
         actionButtons.setAlignment(Pos.CENTER);
 
+        difficultyBox.setOnAction(e -> {
+            selectedImages.clear();
+            imageGallery.getChildren().clear();
+            statusLabel.setText("");
+        });
+
         VBox form = new VBox(15);
         form.setAlignment(Pos.CENTER_LEFT);
         form.setMaxWidth(760);
@@ -251,17 +267,12 @@ public class CustomPuzzlePane extends VBox {
             
             Tooltip.install(iv, new Tooltip("Click to remove image"));
 
+            VBox container = new VBox(5);
             iv.setOnMouseClicked(e -> {
                 items.remove(box);
-                gallery.getChildren().removeIf(node -> {
-                    if (node instanceof VBox vb) {
-                         return vb.getUserData() != null && vb.getUserData().equals(box.path);
-                    }
-                    return false;
-                });
+                gallery.getChildren().remove(container);
             });
 
-            VBox container = new VBox(5);
             container.setAlignment(Pos.CENTER);
             container.getChildren().addAll(iv, box.hintField);
             container.setUserData(box.path);

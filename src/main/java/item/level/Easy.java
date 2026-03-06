@@ -2,6 +2,7 @@ package item.level;
 
 import item.base.BasePuzzle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +24,6 @@ public class Easy extends BasePuzzle {
     private final int timeLimit = 20;
 
     /**
-     * A flag indicating if this puzzle instance contains visual images.
-     */
-    private boolean hasPicture = false;
-
-    /**
      * Constructs an Easy puzzle instance with a specific answer and a list of pictures.
      * Sets the hasPicture flag to true upon initialization.
      * @param answer The correct solution string for the puzzle.
@@ -35,17 +31,10 @@ public class Easy extends BasePuzzle {
      */
     public Easy(String answer, List<String> pictureNames) {
         super(answer);
-        this.pictureNames = pictureNames;
-        this.hasPicture = true;
-    }
-
-    /**
-     * Returns whether the puzzle currently possesses associated images.
-     * @return True if the puzzle has pictures, otherwise false.
-     */
-    @Override
-    public boolean getHasPicture() {
-        return hasPicture;
+        this.pictureNames = new ArrayList<>();
+        for (String pictureName : pictureNames) {
+            setPictureName(pictureName);
+        }
     }
 
     /**
@@ -55,7 +44,7 @@ public class Easy extends BasePuzzle {
      */
     @Override
     public void setPictureName(String pictureName) {
-
+        this.pictureNames.add(pictureName);
     }
 
     /**
