@@ -42,6 +42,7 @@ public class CustomPuzzlePane extends VBox {
 
         ObservableList<Goto.CustomPuzzleEntry> customPuzzles = FXCollections.observableArrayList(Goto.getCustomPuzzles());
         ListView<Goto.CustomPuzzleEntry> customList = new ListView<>(customPuzzles);
+        customList.setStyle("-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;");
         customList.setPrefWidth(720);
         customList.setPrefHeight(400);
         customList.setMaxWidth(800);
@@ -56,6 +57,7 @@ public class CustomPuzzlePane extends VBox {
                 } else {
                     VBox root = new VBox(10);
                     root.setPadding(new Insets(10));
+                    root.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
                     root.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
 
                     Text header = new Text(item.difficulty + " | Answer: " + item.puzzle.getAnswer());
@@ -100,14 +102,11 @@ public class CustomPuzzlePane extends VBox {
         });
 
         Button addButton = new Button("Add New Puzzle");
-        addButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
-        addButton.setPrefWidth(220);
-        addButton.setPrefHeight(54);
+        styleButton(addButton);
         addButton.setOnAction(e -> showAddView());
 
         Button removePuzzleButton = new Button("Remove Selected Puzzle");
-        removePuzzleButton.setPrefWidth(220);
-        removePuzzleButton.setPrefHeight(40);
+        styleButton(removePuzzleButton);
         removePuzzleButton.setOnAction(e -> {
             Goto.CustomPuzzleEntry selected = customList.getSelectionModel().getSelectedItem();
             if (selected != null) {
@@ -143,7 +142,7 @@ public class CustomPuzzlePane extends VBox {
         FlowPane imageGallery = new FlowPane(10, 10);
         imageGallery.setAlignment(Pos.CENTER_LEFT);
         imageGallery.setPadding(new Insets(10));
-        imageGallery.setStyle("-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 5;");
+        imageGallery.setStyle("-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;");
         imageGallery.setPrefWrapLength(720);
         imageGallery.setMinHeight(150);
 
@@ -151,15 +150,14 @@ public class CustomPuzzlePane extends VBox {
 
         Label statusLabel = new Label();
         statusLabel.setTextFill(Color.WHITE);
+        statusLabel.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 16));
 
         Button chooseImagesButton = new Button("Choose Images…");
-        chooseImagesButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 18));
-        chooseImagesButton.setPrefWidth(220);
-        chooseImagesButton.setPrefHeight(54);
+        styleButton(chooseImagesButton);
 
         chooseImagesButton.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
-            chooser.setTitle("Choose puzzle images");
+            chooser.setTitle("Choose Puzzle Image(s)");
             chooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
             );
@@ -185,9 +183,7 @@ public class CustomPuzzlePane extends VBox {
         });
 
         Button saveButton = new Button("Save Puzzle");
-        saveButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
-        saveButton.setPrefWidth(220);
-        saveButton.setPrefHeight(54);
+        styleButton(saveButton);
         saveButton.setOnAction(e -> {
             GameMode difficulty = difficultyBox.getValue();
             String answer = safeTrim(answerField.getText());
@@ -222,9 +218,7 @@ public class CustomPuzzlePane extends VBox {
         });
 
         Button cancelButton = new Button("Cancel");
-        cancelButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
-        cancelButton.setPrefWidth(220);
-        cancelButton.setPrefHeight(54);
+        styleButton(cancelButton);
         cancelButton.setOnAction(e -> showListView());
 
         HBox actionButtons = new HBox(20, saveButton, cancelButton);
@@ -271,7 +265,7 @@ public class CustomPuzzlePane extends VBox {
             container.setAlignment(Pos.CENTER);
             container.getChildren().addAll(iv, box.hintField);
             container.setUserData(box.path);
-            container.setStyle("-fx-border-color: white; -fx-border-width: 1; -fx-padding: 5;");
+            container.setStyle("-fx-border-color: white; -fx-border-width: 1; -fx-border-radius: 5; -fx-padding: 5;");
             
             gallery.getChildren().add(container);
         } catch (Exception e) {
@@ -305,42 +299,33 @@ public class CustomPuzzlePane extends VBox {
         return s == null ? "" : s.trim();
     }
 
+    private void styleButton(Button button) {
+        button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, false))));
 
-    private static Button createStartButton(String text, String mode) {
-        Button button = new Button(text);
-        button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 16));
-        button.setPrefWidth(150);
-        button.setPrefHeight(54);
-        button.setOnAction(e -> {
-            setBackButtonClicked(false);
-            Goto.initQuiz(mode);
+        button.setOnMouseExited(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.BLACK);
         });
-        return button;
+
+        button.setOnMouseEntered(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.WHITE);
+        });
+
+        button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
+        button.setPrefWidth(300);
+        button.setPrefHeight(80);
     }
 
     private Button createBackButton() {
         Button back = new Button("Back");
-        back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize(100, 100, true, true, true, false))));
-
-        back.setOnMouseExited(mouseEvent -> {
-            back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            back.setTextFill(Color.BLACK);
-        });
-
-        back.setOnMouseEntered(mouseEvent -> {
-            back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            back.setTextFill(Color.WHITE);
-        });
-
-        back.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
-        back.setPrefWidth(300);
-        back.setPrefHeight(80);
+        styleButton(back);
         VBox.setMargin(back, new Insets(40, 0, 0, 0));
 
         back.setOnMouseClicked(mouseEvent -> {

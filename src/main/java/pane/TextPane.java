@@ -30,6 +30,7 @@ public class TextPane extends VBox {
      * which determines the specific game logic and transition rules.
      */
     private String gameMode;
+    private String originalPrompt;
 
     /** * The input field where the player types their answer.
      */
@@ -54,7 +55,18 @@ public class TextPane extends VBox {
         playerLabel.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 24));
         playerLabel.setTextFill(Color.WHITE);
 
-        textField.setPromptText("ตอบเป็นภาษาไทย");
+        if (gameMode.equals("BATTLE")) {
+            if (playerLabelText.contains("PLAYER A")) {
+                originalPrompt = "กด TAB เพื่อตอบ";
+            } else if (playerLabelText.contains("PLAYER B")) {
+                originalPrompt = "กด ENTER เพื่อตอบ";
+            } else {
+                originalPrompt = "ตอบเป็นภาษาไทย";
+            }
+        } else {
+            originalPrompt = "ตอบเป็นภาษาไทย";
+        }
+        textField.setPromptText(originalPrompt);
         textField.setPrefWidth(400);
         textField.setMaxWidth(550);
         textField.setPrefHeight(65);
@@ -108,6 +120,8 @@ public class TextPane extends VBox {
 
                 if (gameMode.equals("EXTREME")) {
                     if (!checkAnswer) {
+                        textField.clear();
+                        resetPromptText();
                         Goto.resultPage(gameMode);
                     } else {
                         Goto.checkQuiz(gameMode);
@@ -118,6 +132,8 @@ public class TextPane extends VBox {
                     }
                     else {
                         if(gameMode.equals("BATTLE")){
+                            textField.clear();
+                            resetPromptText();
                             textField.setDisable(true);
                         }
                     }
@@ -128,6 +144,13 @@ public class TextPane extends VBox {
         });
 
         getChildren().addAll(playerLabel, textField, button);
+    }
+
+    /**
+     * Resets the TextField's prompt text to its original value.
+     */
+    public void resetPromptText() {
+        textField.setPromptText(originalPrompt);
     }
 
     /**

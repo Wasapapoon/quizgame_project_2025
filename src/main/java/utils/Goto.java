@@ -285,7 +285,6 @@ public class Goto {
                 questions.addAll(BattleMode);
                 quizPage(gameMode);
             }
-
         }
     }
 
@@ -368,11 +367,13 @@ public class Goto {
                             textPane1.getTextField().setDisable(false);
                             textPane2.getTextField().setDisable(true);
                             textPane1.getTextField().requestFocus();
+                            textPane1.getTextField().setPromptText("ตอบเป็นภาษาไทย");
                             event.consume();
                         } else if (event.getCode() == KeyCode.ENTER) {
                             textPane2.getTextField().setDisable(false);
                             textPane1.getTextField().setDisable(true);
                             textPane2.getTextField().requestFocus();
+                            textPane2.getTextField().setPromptText("ตอบเป็นภาษาไทย");
                             event.consume();
                         }
                     }
@@ -451,6 +452,23 @@ public class Goto {
         inputContainer.getChildren().add(textPane);
         rootPane.getChildren().add(inputContainer);
 
+        Platform.runLater(() -> {
+            Scene scene = rootPane.getScene();
+            if (scene != null) {
+                if (currentFilter != null) {
+                    scene.removeEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+                }
+
+                currentFilter = event -> {
+                    if (event.getCode() == KeyCode.RIGHT) {
+                        event.consume();
+                        checkQuiz(gameMode);
+                    }
+                };
+                scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+            }
+        });
+
         gameTimer.setOnTimeOut(() -> {
             player.setHp(player.getHp() - 1);
             playerLife.updateHazardDisplay();
@@ -497,14 +515,11 @@ public class Goto {
         if (questions.isEmpty()) {
             resultPage(gameMode);
         } else {
-            if(gameMode.equals("BATTLE")){
+            if (gameMode.equals("BATTLE")) {
                 quizPage(gameMode);
-            }
-            else{
+            } else {
                 singlePlayerPage(gameMode);
             }
-
-
         }
     }
 

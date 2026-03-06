@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -37,18 +38,14 @@ public class ResultPane extends VBox {
         setPadding(new Insets(32,0,32,0));
                 
         Button tryAgain = new Button("Try Again");
-        tryAgain.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
-        tryAgain.setPrefWidth(400);
-        tryAgain.setPrefHeight(100);
+        styleButton(tryAgain);
         tryAgain.setOnMouseClicked(mouseEvent -> {
             gameTimer.stop();
-        	initQuiz(gameMode);
+        	initQuiz(this.gameMode);
         }); 
 
         Button exit = new Button("Return");
-        exit.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
-        exit.setPrefWidth(400);
-        exit.setPrefHeight(100);
+        styleButton(exit);
         exit.setOnMouseClicked(mouseEvent -> {
 
             gameTimer.stop();
@@ -70,6 +67,30 @@ public class ResultPane extends VBox {
         VBox.setMargin(vBox, new Insets(500,0,0,0));
 
         getChildren().add(vBox);
+    }
+
+    private void styleButton(Button button) {
+        button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, false))));
+
+        button.setOnMouseExited(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.BLACK);
+        });
+
+        button.setOnMouseEntered(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.WHITE);
+        });
+
+        button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
+        button.setPrefWidth(400);
+        button.setPrefHeight(100);
     }
 
 }

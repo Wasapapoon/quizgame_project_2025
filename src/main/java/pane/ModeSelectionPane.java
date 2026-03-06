@@ -53,17 +53,6 @@ public class ModeSelectionPane extends VBox {
         Button hardButton = createDifficultyButton("Hard", GameMode.HARD);
         Button battleButton = createDifficultyButton("Battle", GameMode.BATTLE);
 
-
-        easyButton.setPrefWidth(400);
-        mediumButton.setPrefWidth(400);
-        hardButton.setPrefWidth(400);
-        battleButton.setPrefWidth(400);
-        
-        easyButton.setPrefHeight(110);
-        mediumButton.setPrefHeight(110);
-        hardButton.setPrefHeight(110);
-        battleButton.setPrefHeight(110);
-
         Text text = new Text("Select Mode");
         text.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 45));
         text.setFill(Color.WHITE);
@@ -81,14 +70,7 @@ public class ModeSelectionPane extends VBox {
      */
     private Button createDifficultyButton(String text, GameMode difficulty) {
         Button button = new Button(text);
-        button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 25));
-        button.setPrefWidth(120);
-        button.setPrefHeight(50);
-        button.setTextFill(Color.BLACK);
-        button.setStyle("-fx-background-color: lightgray;");
-
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: darkgray;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: lightgray;"));
+        styleButton(button);
 
         button.setOnAction(e -> {
             gameModeSelector.setDifficultyLevel(difficulty);
@@ -106,27 +88,8 @@ public class ModeSelectionPane extends VBox {
      */
     private Button createBackButton() {
     	Button back = new Button("Back");
-        back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize(100, 100, true, true, true, false))));
+        styleButton(back, 20, 300, 80);
 
-        back.setOnMouseExited(mouseEvent -> {
-            back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            back.setTextFill(Color.BLACK);
-        });
-
-        back.setOnMouseEntered(mouseEvent -> {
-            back.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                    new BackgroundSize(100, 100, true, true, true, false))));
-            back.setTextFill(Color.WHITE);
-        });
-
-        back.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 20));
-        back.setPrefWidth(300);
-        back.setPrefHeight(80);
         VBox.setMargin(back, new Insets(110, 0, 0, 0));
         
         back.setOnMouseClicked(mouseEvent -> {
@@ -135,6 +98,34 @@ public class ModeSelectionPane extends VBox {
         });
         
         return back;
+    }
+
+    private void styleButton(Button button) {
+        styleButton(button, 25, 400, 110);
+    }
+
+    private void styleButton(Button button, int fontSize, double width, double height) {
+        button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(100, 100, true, true, true, false))));
+
+        button.setOnMouseExited(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.BLACK);
+        });
+
+        button.setOnMouseEntered(mouseEvent -> {
+            button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback2.png"))),
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, false))));
+            button.setTextFill(Color.WHITE);
+        });
+
+        button.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, fontSize));
+        button.setPrefWidth(width);
+        button.setPrefHeight(height);
     }
 
     /** @return True if the back button was clicked, otherwise false. */
