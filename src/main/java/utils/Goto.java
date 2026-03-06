@@ -7,6 +7,8 @@ import item.level.Hard;
 import item.level.Medium;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -14,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import mode.GameMode;
 import pane.*;
 
 import java.util.ArrayList;
@@ -22,17 +25,90 @@ import java.util.List;
 import java.util.Objects;
 
 import mode.GameModeSelector;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
 public class Goto {
-    
+
     private static RootPane rootPane;
 
     private static MediaPlayer mediaPlayer;
 
     private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
+
+    // --- Custom puzzles (in-memory) with ids so UI can remove them ---
+    private static final ArrayList<CustomPuzzleEntry> customPuzzles = new ArrayList<>();
+    private static long nextCustomPuzzleId = 1;
+
+    public static final class CustomPuzzleEntry {
+        public final long id;
+        public final GameMode difficulty;
+        public final BasePuzzle puzzle;
+
+        public CustomPuzzleEntry(long id, GameMode difficulty, BasePuzzle puzzle) {
+            this.id = id;
+            this.difficulty = difficulty;
+            this.puzzle = puzzle;
+        }
+    }
+
+    public static List<CustomPuzzleEntry> getCustomPuzzles() {
+        return new ArrayList<>(customPuzzles);
+    }
+
+    public static long addCustomPuzzle(GameMode difficulty, String answer, List<String> pictureNamesOrPaths, List<String> hints) {
+        Objects.requireNonNull(difficulty, "difficulty");
+        Objects.requireNonNull(answer, "answer");
+        Objects.requireNonNull(pictureNamesOrPaths, "pictureNamesOrPaths");
+
+        BasePuzzle puzzle = switch (difficulty) {
+            case EASY -> new Easy(answer, pictureNamesOrPaths);
+            case MEDIUM -> new Medium(answer, pictureNamesOrPaths, hints == null ? List.of() : hints);
+            case HARD -> new Hard(answer, pictureNamesOrPaths, hints == null ? List.of() : hints);
+            default -> throw new IllegalArgumentException("Unsupported difficulty for custom puzzle: " + difficulty);
+        };
+
+        long id = nextCustomPuzzleId++;
+        customPuzzles.add(new CustomPuzzleEntry(id, difficulty, puzzle));
+        return id;
+    }
+
+    public static boolean removeCustomPuzzle(long id) {
+        return customPuzzles.removeIf(p -> p.id == id);
+    }
+
+    public static List<String> getCustomPuzzleDisplayList() {
+        ArrayList<String> rows = new ArrayList<>();
+        for (CustomPuzzleEntry e : customPuzzles) {
+            int imgCount = (e.puzzle.getPictureNames() == null) ? 0 : e.puzzle.getPictureNames().size();
+            rows.add("#" + e.id + " | " + e.difficulty + " | answer: " + e.puzzle.getAnswer() + " | images: " + imgCount);
+        }
+        return rows;
+    }
+
+    public static long parseCustomPuzzleIdFromDisplayRow(String row) {
+        if (row == null) return -1;
+        int hash = row.indexOf('#');
+        int space = row.indexOf(' ', hash);
+        if (hash < 0 || space < 0) return -1;
+        String idStr = row.substring(hash + 1, space).trim();
+        try {
+            return Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private static List<BasePuzzle> getCustomPuzzlesForMode(String gameMode) {
+        ArrayList<BasePuzzle> result = new ArrayList<>();
+        for (CustomPuzzleEntry e : customPuzzles) {
+            if ("BATTLE".equals(gameMode)) {
+                result.add(e.puzzle);
+            } else if (e.difficulty.toString().equals(gameMode)) {
+                result.add(e.puzzle);
+            }
+        }
+        return result;
+    }
 
     public static Player player = new Player("HP LEFT");
 
@@ -43,17 +119,17 @@ public class Goto {
     public static DigitalTimer gameTimer = new DigitalTimer();
 
     private static EventHandler<KeyEvent> currentFilter;
-    
+
     private static double windowWidth ;
-    
+
     private static double windowHeight ;
 
-
     public static void initializeWindowSize(RootPane root) {
-    	rootPane = root;
+        rootPane = root;
         setWindowWidth(rootPane.getScene().getWindow().getWidth());
         setWindowHeight(rootPane.getScene().getWindow().getHeight());
     }
+
     public static void setMediaPlayer(String musicUrl) {
         try {
             Media media = new Media(musicUrl);
@@ -66,11 +142,10 @@ public class Goto {
     public static void setRootPane(RootPane rootPane) {
         Goto.rootPane = rootPane;
     }
-    
+
     public static RootPane getRootPane() {
-    	return rootPane;
+        return rootPane;
     }
-    
 
     private static void music(String musicPath){
         if (mediaPlayer != null) {
@@ -85,20 +160,20 @@ public class Goto {
 
     public static void clear(){
         if(rootPane.getChildren().size() > 1){
-                rootPane.getChildren().remove(1,rootPane.getChildren().size());
+            rootPane.getChildren().remove(1,rootPane.getChildren().size());
         }
     }
 
     public static void titleScreenPage(){
         clear();
-        if (!ModeSelectionPane.getBackButtonClicked()) {
+        if (!ModeSelectionPane.getBackButtonClicked() && !CustomPuzzlePane.getBackButtonClicked()) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/title_screen_music.mp3")).toExternalForm());
         }
-        rootPane.getChildren().add(new TitleScreenPane());  
+        rootPane.getChildren().add(new TitleScreenPane());
     }
 
     public static void initQuiz(String gameMode) {
-    	if (gameMode.equals("BATTLE")) {
+        if (gameMode.equals("BATTLE")) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/extreme_quiz.mp3")).toExternalForm());
         } else {
             music(Objects.requireNonNull(Goto.class.getResource("/music/quiz_music.mp3")).toExternalForm());
@@ -107,9 +182,9 @@ public class Goto {
         player.setHp(3);
         playerA.setHp(3);
         playerB.setHp(3);
-        
+
         questions.clear();
-        
+
         ArrayList<BasePuzzle> EasyLevel= new ArrayList<>();
         ArrayList<BasePuzzle> MediumLevel = new ArrayList<>();
         ArrayList<BasePuzzle> HardLevel = new ArrayList<>();
@@ -122,6 +197,7 @@ public class Goto {
                 EasyLevel.add(new Easy("ประยุทธ์", List.of("easy3_1.png", "easy3_2.png")));
                 EasyLevel.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
 
+                EasyLevel.addAll(getCustomPuzzlesForMode(gameMode));
                Collections.shuffle(EasyLevel);
                questions.addAll(EasyLevel);
                singlePlayerPage(gameMode);
@@ -132,6 +208,7 @@ public class Goto {
                 MediumLevel.add(new Medium( "ไดโนเสาร์", List.of("medium3_1.png", "medium3_2.png", "medium3_3.png"),List.of("ไดร์เป่าผม","no","ดาวเสาร์")));
                 MediumLevel.add(new Medium( "มันคือแป้ง", List.of("medium4_1.png", "medium4_2.png", "medium4_3.png"),List.of("มัน","เป็น อยู่ คือ","แป้งเย็น")));
 
+                MediumLevel.addAll(getCustomPuzzlesForMode(gameMode));
                 Collections.shuffle(MediumLevel);
                 questions.addAll(MediumLevel);
                 singlePlayerPage(gameMode);
@@ -141,6 +218,7 @@ public class Goto {
                 HardLevel.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
                 HardLevel.add(new Hard( "เป็ดย่างบรรทัดทอง", List.of("hard3_1.png", "hard3_2.png", "hard3_3.png", "hard3_4.png"),List.of("เป็ดย่าง","ไม้บรรทัด","no ไม้","ทอง")));
 
+                HardLevel.addAll(getCustomPuzzlesForMode(gameMode));
                 Collections.shuffle(HardLevel);
                 questions.addAll(HardLevel);
                 singlePlayerPage(gameMode);
@@ -152,6 +230,7 @@ public class Goto {
                 BattleMode.add(new Medium( "ไลน์เรนเจอร์", List.of("medium2_1.png", "medium2_2.jpg", "medium2_3.png"),List.of("เส้น (line)","เล่น","เจอเพื่อน")));
                 BattleMode.add(new Hard( "เต้มงคลกิตติ์", List.of("hard2_1.png", "hard2_2.png", "hard2_3.png", "hard2_4.png"),List.of("เต้","มงกุฏ","คน","git")));
 
+                BattleMode.addAll(getCustomPuzzlesForMode(gameMode));
                 Collections.shuffle(BattleMode);
                 questions.addAll(BattleMode);
                 quizPage(gameMode);
@@ -340,10 +419,13 @@ public class Goto {
 
     public static void checkQuiz(String gameMode) {
         clear();
-        questions.removeFirst();
+
+        if (!questions.isEmpty()) {
+            questions.removeFirst();
+        }
         if (questions.isEmpty()) {
             resultPage(gameMode);
-        } else{
+        } else {
             if(gameMode.equals("BATTLE")){
                 quizPage(gameMode);
             }
@@ -397,26 +479,19 @@ public class Goto {
 
         rootPane.getChildren().add(new ResultPane(gameMode));
     }
-    
+
     public static void levelSelectionPage(GameModeSelector gameModeSelector) {
-    	clear();
-    	
-    	rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
+        clear();
+        rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
     }
 
-	public static double getWindowWidth() {
-		return windowWidth;
-	}
+    public static void customPuzzlePage() {
+        clear();
+        rootPane.getChildren().add(new CustomPuzzlePane());
+    }
 
-	public static void setWindowWidth(double windowWidth) {
-		Goto.windowWidth = windowWidth;
-	}
-
-	public static double getWindowHeight() {
-		return windowHeight;
-	}
-
-	public static void setWindowHeight(double windowHeight) {
-		Goto.windowHeight = windowHeight;
-	}
+    public static double getWindowWidth() { return windowWidth; }
+    public static void setWindowWidth(double windowWidth) { Goto.windowWidth = windowWidth; }
+    public static double getWindowHeight() { return windowHeight; }
+    public static void setWindowHeight(double windowHeight) { Goto.windowHeight = windowHeight; }
 }

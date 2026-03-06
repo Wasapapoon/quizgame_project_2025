@@ -13,6 +13,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.Goto;
+
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,38 +37,61 @@ public class GamePane extends GridPane {
 
         if (pictures != null) {
             for (int i = 0; i < pictures.size(); i++) {
-                String fileName = pictures.get(i);
-                var resource = Goto.class.getResourceAsStream("/" + fileName);
+                String fileNameOrPath = pictures.get(i);
 
-                if (resource != null) {
-                    VBox column = new VBox(15);
-                    column.setAlignment(Pos.CENTER);
+                Image image = loadImageFromResourceOrFile(fileNameOrPath);
+                if (image == null) continue;
 
-                    ImageView quizImg = new ImageView(new Image(resource));
-                    quizImg.setPreserveRatio(true);
-                    if(question instanceof hasHint){
-                        quizImg.setFitWidth(240);
-                    }
-                    else {
-                        quizImg.setFitWidth(280);
-                    }
+                VBox column = new VBox(15);
+                column.setAlignment(Pos.CENTER);
 
-                    column.getChildren().add(quizImg);
-
-                    if (question instanceof hasHint && hints != null && i < hints.size()) {
-                        Text hintDisplay = new Text("hint " + ": " + hints.get(i));
-                        hintDisplay.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 18));
-                        hintDisplay.setFill(Color.YELLOW);
-                        hintDisplay.setVisible(false);
-
-                        hintTextList.add(hintDisplay);
-                        column.getChildren().add(hintDisplay);
-                    }
-                    imagesBox.getChildren().add(column);
+                ImageView quizImg = new ImageView(image);
+                quizImg.setPreserveRatio(true);
+                if(question instanceof hasHint){
+                    quizImg.setFitWidth(240);
                 }
+                else {
+                    quizImg.setFitWidth(280);
+                }
+
+                column.getChildren().add(quizImg);
+
+                if (question instanceof hasHint && hints != null && i < hints.size()) {
+                    Text hintDisplay = new Text("hint " + ": " + hints.get(i));
+                    hintDisplay.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 18));
+                    hintDisplay.setFill(Color.YELLOW);
+                    hintDisplay.setVisible(false);
+
+                    hintTextList.add(hintDisplay);
+                    column.getChildren().add(hintDisplay);
+                }
+                imagesBox.getChildren().add(column);
             }
         }
         getChildren().add(imagesBox);
+    }
+
+    private static Image loadImageFromResourceOrFile(String fileNameOrPath) {
+        if (fileNameOrPath == null || fileNameOrPath.isBlank()) return null;
+
+        // 1) Try resource (existing puzzles)
+        try (InputStream resource = Goto.class.getResourceAsStream("/" + fileNameOrPath)) {
+            if (resource != null) {
+                return new Image(resource);
+            }
+        } catch (Exception ignored) {
+        }
+
+        // 2) Try filesystem path (FileChooser-selected custom puzzles)
+        try {
+            File f = new File(fileNameOrPath);
+            if (f.exists() && f.isFile()) {
+                return new Image(f.toURI().toString());
+            }
+        } catch (Exception ignored) {
+        }
+
+        return null;
     }
 
     public void updateHintsByTime(int currentTime, BasePuzzle question, String gameMode) {

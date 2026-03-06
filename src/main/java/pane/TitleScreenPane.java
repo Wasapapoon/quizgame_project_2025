@@ -17,6 +17,7 @@ import java.util.Objects;
 
 public class TitleScreenPane extends VBox { 
     private Button playButton;
+    private Button customPuzzleButton;
     private GameModeSelector gameModeSelector;
 
     public TitleScreenPane() {
@@ -39,6 +40,17 @@ public class TitleScreenPane extends VBox {
 
         exitButton.setOnMouseClicked(e -> Platform.exit());
 
+        customPuzzleButton = new Button("Custom Puzzles");
+        customPuzzleButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
+        customPuzzleButton.setPrefWidth(400);
+        customPuzzleButton.setPrefHeight(100);
+        customPuzzleButton.setOnMouseClicked(e -> {
+            Goto.customPuzzlePage();
+        });
+        customPuzzleButton.setBackground(new Background(new BackgroundFill(Color.GREENYELLOW , CornerRadii.EMPTY, Insets.EMPTY)));
+        VBox.setMargin(customPuzzleButton, new Insets(60,0,0,0));
+        customPuzzleButton.setOnMouseEntered(e -> customPuzzleButton.setBackground(new Background(new BackgroundFill(Color.YELLOWGREEN , CornerRadii.EMPTY, Insets.EMPTY))));
+        customPuzzleButton.setOnMouseExited(e -> customPuzzleButton.setBackground(new Background(new BackgroundFill(Color.GREENYELLOW , CornerRadii.EMPTY, Insets.EMPTY))));
 
         playButton = new Button("Play");
         playButton.setFont(Font.font("Noto Sans Thai", FontWeight.BOLD, 36));
@@ -53,9 +65,11 @@ public class TitleScreenPane extends VBox {
         playButton.setOnMouseExited(e -> playButton.setBackground(new Background(new BackgroundFill(Color.GREENYELLOW , CornerRadii.EMPTY, Insets.EMPTY))));
 
         VBox.setMargin(playButton, new Insets(80, 0, 20, 0));
-        VBox.setMargin(exitButton, new Insets(15, 0, 50, 0));
+        VBox.setMargin(customPuzzleButton, new Insets(20, 0, 20, 0));
+        VBox.setMargin(exitButton, new Insets(20, 0, 50, 0));
+        VBox.setMargin(exitButton, new Insets(20, 0, 50, 0));
 
-        getChildren().addAll(playButton, exitButton);
+        getChildren().addAll(playButton, customPuzzleButton, exitButton);
 
 
     }
