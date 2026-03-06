@@ -19,11 +19,11 @@ import java.util.Objects;
  * The RootPane class serves as the primary container for the entire application's UI.
  * It implements the Singleton Pattern to ensure that only one root container exists
  * throughout the game's lifecycle, providing a centralized point for page switching.
- * * @author [Your Name]
  */
 public class RootPane extends VBox {
 
-    /** * The single static instance of RootPane used to implement the Singleton Pattern.
+    /**
+     * The single static instance of RootPane used to implement the Singleton Pattern.
      */
     private static RootPane instance;
 

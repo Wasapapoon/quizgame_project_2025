@@ -26,13 +26,19 @@ import java.util.Objects;
  */
 public class TextPane extends VBox {
 
-    /** * The current game mode (e.g., EASY, MEDIUM, HARD, BATTLE, or EXTREME)
+    /**
+     * The current game mode (e.g., EASY, MEDIUM, HARD, BATTLE, or EXTREME)
      * which determines the specific game logic and transition rules.
      */
     private String gameMode;
+
+    /**
+     * The original prompt text to be displayed when the input field is empty.
+     */
     private String originalPrompt;
 
-    /** * The input field where the player types their answer.
+    /**
+     * The input field where the player types their answer.
      */
     private TextField textField = new TextField();
 

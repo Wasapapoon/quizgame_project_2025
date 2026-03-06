@@ -44,15 +44,29 @@ public class Goto {
     /** The list of puzzles generated for the current game session. */
     private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
 
-    // --- Custom puzzles (in-memory) with ids so UI can remove them ---
+    /** The list of custom puzzles created during the session. */
     private static final ArrayList<CustomPuzzleEntry> customPuzzles = new ArrayList<>();
+
+    /** The identifier for the next custom puzzle to be added. */
     private static long nextCustomPuzzleId = 1;
 
+    /**
+     * A record of a custom puzzle entry including its unique ID, difficulty level, and puzzle instance.
+     */
     public static final class CustomPuzzleEntry {
+        /** The unique identifier of the custom puzzle entry. */
         public final long id;
+        /** The difficulty level associated with the custom puzzle. */
         public final GameMode difficulty;
+        /** The puzzle instance containing the answer and images. */
         public final BasePuzzle puzzle;
 
+        /**
+         * Constructs a new CustomPuzzleEntry.
+         * @param id The unique ID for this entry.
+         * @param difficulty The difficulty level of the puzzle.
+         * @param puzzle The puzzle instance.
+         */
         public CustomPuzzleEntry(long id, GameMode difficulty, BasePuzzle puzzle) {
             this.id = id;
             this.difficulty = difficulty;
@@ -60,10 +74,22 @@ public class Goto {
         }
     }
 
+    /**
+     * Retrieves the current list of custom puzzle entries.
+     * @return A list of all custom puzzle entries.
+     */
     public static List<CustomPuzzleEntry> getCustomPuzzles() {
         return new ArrayList<>(customPuzzles);
     }
 
+    /**
+     * Adds a new custom puzzle to the system.
+     * @param difficulty The difficulty level for the puzzle.
+     * @param answer The correct solution string.
+     * @param pictureNamesOrPaths A list of image resource names or filesystem paths.
+     * @param hints A list of hint strings (may be null for Easy mode).
+     * @return The unique ID of the newly created puzzle entry.
+     */
     public static long addCustomPuzzle(GameMode difficulty, String answer, List<String> pictureNamesOrPaths, List<String> hints) {
         Objects.requireNonNull(difficulty, "difficulty");
         Objects.requireNonNull(answer, "answer");
@@ -81,10 +107,20 @@ public class Goto {
         return id;
     }
 
+    /**
+     * Removes a custom puzzle entry by its unique identifier.
+     * @param id The ID of the puzzle to remove.
+     * @return True if a puzzle was removed, otherwise false.
+     */
     public static boolean removeCustomPuzzle(long id) {
         return customPuzzles.removeIf(p -> p.id == id);
     }
 
+    /**
+     * Retrieves custom puzzles filtered by the specified game mode.
+     * @param gameMode The game mode or difficulty string.
+     * @return A list of puzzles matching the criteria.
+     */
     private static List<BasePuzzle> getCustomPuzzlesForMode(String gameMode) {
         ArrayList<BasePuzzle> result = new ArrayList<>();
         for (CustomPuzzleEntry e : customPuzzles) {
@@ -564,6 +600,9 @@ public class Goto {
         rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
     }
 
+    /**
+     * Navigates to the custom puzzle management page.
+     */
     public static void customPuzzlePage() {
         clear();
         rootPane.getChildren().add(new CustomPuzzlePane());

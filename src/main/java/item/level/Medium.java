@@ -45,8 +45,7 @@ public class Medium extends BasePuzzle implements hasHint {
     }
 
     /**
-     * Placeholder method for setting a picture name.
-     * In the Medium level implementation, this method currently performs no action.
+     * Adds a picture name to the list of images for this puzzle.
      * @param pictureName The file name of the image.
      */
     @Override

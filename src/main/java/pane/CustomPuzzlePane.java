@@ -94,10 +94,8 @@ public class CustomPuzzlePane extends VBox {
                         try {
                             Image img;
                             if (path.startsWith("/") || path.contains(":/") || path.contains(":\\")) {
-                                // Assume it's an absolute path if it looks like one
                                 img = new Image(new File(path).toURI().toString(), 80, 80, true, true);
                             } else {
-                                // Try resource
                                 img = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/" + path)), 80, 80, true, true);
                             }
                             ImageView iv = new ImageView(img);

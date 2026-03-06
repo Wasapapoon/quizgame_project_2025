@@ -26,6 +26,10 @@ public class TitleScreenPane extends VBox {
      * The button used to initiate the transition to the game level selection screen.
      */
     private Button playButton;
+
+    /**
+     * The button used to navigate to the custom puzzle creation and management page.
+     */
     private Button customPuzzleButton;
 
     /**
@@ -81,6 +85,10 @@ public class TitleScreenPane extends VBox {
     }
 
 
+    /**
+     * Applies the standard button styling including background images, font, and hover effects.
+     * @param button The Button instance to be styled.
+     */
     private void styleButton(Button button) {
         button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,

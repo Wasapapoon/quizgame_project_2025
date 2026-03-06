@@ -25,7 +25,6 @@ public class Easy extends BasePuzzle {
 
     /**
      * Constructs an Easy puzzle instance with a specific answer and a list of pictures.
-     * Sets the hasPicture flag to true upon initialization.
      * @param answer The correct solution string for the puzzle.
      * @param pictureNames A list of image file names used to visualize the puzzle.
      */
@@ -38,8 +37,7 @@ public class Easy extends BasePuzzle {
     }
 
     /**
-     * Placeholder method for setting a picture name.
-     * In the Easy level implementation, this method currently performs no action.
+     * Adds a picture name to the list of images for this puzzle.
      * @param pictureName The file name of the image.
      */
     @Override
