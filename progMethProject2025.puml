@@ -1,0 +1,273 @@
+@startuml
+class item.level.Easy {
+- List<String> pictureNames
+- int timeLimit
+- boolean hasPicture
++ <<Create>> Easy(String,List<String>)
++ boolean getHasPicture()
++ void setPictureName(String)
++ List<String> getPictureNames()
++ int getTimeLimit()
+}
+
+
+class application.Main {
++ {static} void main(String[])
++ void start(Stage)
+}
+
+class entity.Player {
+- String name
+- int hp
++ <<Create>> Player(String)
++ String getName()
++ void setName(String)
++ int getHp()
++ void setHp(int)
++ void reduceHp()
++ boolean isDead()
+}
+
+
+class pane.ResultPane {
+- String gameMode
++ <<Create>> ResultPane(String)
+- void styleButton(Button)
+}
+
+
+class pane.TextPane {
+- String gameMode
+- String originalPrompt
+- TextField textField
++ <<Create>> TextPane(String,String,Player,Player,LifePane)
++ void resetPromptText()
++ TextField getTextField()
+}
+
+
+class item.level.Medium {
+- List<String> pictureNames
+- List<String> hint
+- int timeLimit
++ <<Create>> Medium(String,List<String>,List<String>)
++ boolean getHasPicture()
++ void setPictureName(String)
++ List<String> getPictureNames()
++ List<String> getHint()
++ void setHint(List<String>)
++ boolean getHasHint()
++ int getTimeLimit()
+}
+
+
+class item.level.Hard {
+- List<String> pictureNames
+- List<String> hint
+- int timeLimit
++ <<Create>> Hard(String,List<String>,List<String>)
++ boolean getHasPicture()
++ void setPictureName(String)
++ List<String> getPictureNames()
++ List<String> getHint()
++ void setHint(List<String>)
++ boolean getHasHint()
++ int getTimeLimit()
+}
+
+
+abstract class item.base.BasePuzzle {
+- String answer
++ <<Create>> BasePuzzle(String)
++ String getAnswer()
++ {abstract}boolean getHasPicture()
++ {abstract}void setPictureName(String)
++ {abstract}List<String> getPictureNames()
++ {abstract}int getTimeLimit()
+}
+
+
+interface item.usage.hasHint {
+~ boolean getHasHint()
+~ void setHint(List<String>)
+~ List<String> getHint()
+}
+
+enum mode.GameMode {
++  EASY
++  MEDIUM
++  HARD
++  BATTLE
+}
+
+class pane.CustomPuzzlePane {
+- {static} Boolean backButtonClicked
++ <<Create>> CustomPuzzlePane()
+- void showListView()
+- void showAddView()
+- void addImageToGallery(FlowPane,ObservableList<ImageHintBox>,ImageHintBox)
+- {static} VBox labeled(String,Control)
+- {static} String safeTrim(String)
+- void styleButton(Button)
+- Button createBackButton()
++ {static} Boolean getBackButtonClicked()
++ {static} void setBackButtonClicked(Boolean)
+}
+
+
+class pane.CustomPuzzlePane$ImageHintBox {
+~ String path
+~ TextField hintField
+~ <<Create>> ImageHintBox(String)
+}
+
+
+class pane.ModeSelectionPane {
+- {static} GameModeSelector gameModeSelector
+- {static} Boolean backButtonClicked
++ <<Create>> ModeSelectionPane(GameModeSelector)
+- Button createDifficultyButton(String,GameMode)
+- Button createBackButton()
+- void styleButton(Button)
+- void styleButton(Button,int,double,double)
++ {static} Boolean getBackButtonClicked()
++ {static} void setBackButtonClicked(Boolean)
+}
+
+
+class pane.GamePane {
+- List<Text> hintTextList
++ <<Create>> GamePane(BasePuzzle,String)
+- {static} Image loadImageFromResourceOrFile(String)
++ void updateHintsByTime(int,BasePuzzle,String)
+}
+
+
+class pane.RootPane {
+- {static} RootPane instance
+- <<Create>> RootPane()
++ {static} RootPane getRootPane()
+}
+
+
+class utils.Goto {
+- {static} RootPane rootPane
+- {static} MediaPlayer mediaPlayer
+- {static} ArrayList<BasePuzzle> questions
+- {static} ArrayList<CustomPuzzleEntry> customPuzzles
+- {static} long nextCustomPuzzleId
++ {static} Player player
++ {static} Player playerA
++ {static} Player playerB
++ {static} DigitalTimer gameTimer
+- {static} EventHandler<KeyEvent> currentFilter
+- {static} double windowWidth
+- {static} double windowHeight
++ {static} List<CustomPuzzleEntry> getCustomPuzzles()
++ {static} long addCustomPuzzle(GameMode,String,List<String>,List<String>)
++ {static} boolean removeCustomPuzzle(long)
++ {static} List<String> getCustomPuzzleDisplayList()
++ {static} long parseCustomPuzzleIdFromDisplayRow(String)
+- {static} List<BasePuzzle> getCustomPuzzlesForMode(String)
++ {static} void initializeWindowSize(RootPane)
++ {static} void setMediaPlayer(String)
++ {static} void setRootPane(RootPane)
++ {static} RootPane getRootPane()
+- {static} void music(String)
++ {static} void clear()
++ {static} void titleScreenPage()
++ {static} void initQuiz(String)
++ {static} void quizPage(String)
++ {static} void singlePlayerPage(String)
++ {static} Boolean checkAnswer(String,String,Player,Player,LifePane)
++ {static} void checkQuiz(String)
++ {static} void resultPage(String)
++ {static} void levelSelectionPage(GameModeSelector)
++ {static} void customPuzzlePage()
++ {static} double getWindowWidth()
++ {static} void setWindowWidth(double)
++ {static} double getWindowHeight()
++ {static} void setWindowHeight(double)
+}
+
+
+class utils.Goto$CustomPuzzleEntry {
++ long id
++ GameMode difficulty
++ BasePuzzle puzzle
++ <<Create>> CustomPuzzleEntry(long,GameMode,BasePuzzle)
+}
+
+
+class pane.TitleScreenPane {
+- Button playButton
+- Button customPuzzleButton
+- GameModeSelector gameModeSelector
++ <<Create>> TitleScreenPane()
+- void styleButton(Button)
+}
+
+
+class pane.LifePane {
+- List<ImageView> hearts
+- Player player
++ <<Create>> LifePane(Player)
++ void updateHazardDisplay()
++ void reduceHP()
+}
+
+
+class utils.DigitalTimer {
+- int timeRemaining
+- Timeline timeline
+- Label timerLabel
+- Runnable onTimeOut
+- GamePane gamePane
+- BasePuzzle currentQuestion
+- String difficultyLevel
++ <<Create>> DigitalTimer()
++ void setGameContext(GamePane,BasePuzzle,String)
++ void start(int)
++ void stop()
+- void updateLabel()
++ void setOnTimeOut(Runnable)
+}
+
+
+class mode.GameModeSelector {
+- GameMode currentLevel
++ <<Create>> GameModeSelector()
++ void setDifficultyLevel(GameMode)
++ GameMode getDifficultyLevel()
++ void startGame()
+}
+
+
+interface item.usage.hasLife {
+~ int getHp()
+~ void setHp(int)
+~ void reduceHp()
+~ boolean isDead()
+}
+
+
+
+item.base.BasePuzzle <|-- item.level.Easy
+javafx.application.Application <|-- application.Main
+item.usage.hasLife <|.. entity.Player
+pane.VBox <|-- pane.ResultPane
+pane.VBox <|-- pane.TextPane
+item.usage.hasHint <|.. item.level.Medium
+item.base.BasePuzzle <|-- item.level.Medium
+item.usage.hasHint <|.. item.level.Hard
+item.base.BasePuzzle <|-- item.level.Hard
+pane.VBox <|-- pane.CustomPuzzlePane
+pane.CustomPuzzlePane +.. pane.CustomPuzzlePane$ImageHintBox
+javafx.scene.layout.VBox <|-- pane.ModeSelectionPane
+pane.GridPane <|-- pane.GamePane
+pane.VBox <|-- pane.RootPane
+utils.Goto +.. utils.Goto$CustomPuzzleEntry
+pane.VBox <|-- pane.TitleScreenPane
+javafx.scene.layout.VBox <|-- pane.LifePane
+javafx.scene.layout.StackPane <|-- utils.DigitalTimer
+@enduml
