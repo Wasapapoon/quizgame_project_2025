@@ -34,7 +34,6 @@ import javafx.stage.Stage;
  */
 public class Goto {
 
-
     /** The root container used to swap different game screens. */
     private static RootPane rootPane;
 
@@ -49,6 +48,28 @@ public class Goto {
 
     /** The identifier for the next custom puzzle to be added. */
     private static long nextCustomPuzzleId = 1;
+
+    /** The player instance for single-player modes (Easy, Medium, Hard). */
+    public static Player player = new Player("HP LEFT");
+
+    /** Player A instance used for the competitive Battle mode. */
+    public static Player playerA = new Player("PLAYER A");
+
+    /** Player B instance used for the competitive Battle mode. */
+    public static Player playerB = new Player("PLAYER B");
+
+    /** The shared digital timer used to track remaining time during puzzles. */
+    public static DigitalTimer gameTimer = new DigitalTimer();
+
+    /** The current key event filter used to handle specific key inputs (e.g., Buzz-in keys). */
+    private static EventHandler<KeyEvent> currentFilter;
+
+    /** The recorded width of the primary application window. */
+    private static double windowWidth;
+
+    /** The recorded height of the primary application window. */
+    private static double windowHeight;
+
 
     /**
      * A record of a custom puzzle entry including its unique ID, difficulty level, and puzzle instance.
@@ -132,27 +153,6 @@ public class Goto {
         }
         return result;
     }
-
-    /** The player instance for single-player modes (Easy, Medium, Hard). */
-    public static Player player = new Player("HP LEFT");
-
-    /** Player A instance used for the competitive Battle mode. */
-    public static Player playerA = new Player("PLAYER A");
-
-    /** Player B instance used for the competitive Battle mode. */
-    public static Player playerB = new Player("PLAYER B");
-
-    /** The shared digital timer used to track remaining time during puzzles. */
-    public static DigitalTimer gameTimer = new DigitalTimer();
-
-    /** The current key event filter used to handle specific key inputs (e.g., Buzz-in keys). */
-    private static EventHandler<KeyEvent> currentFilter;
-
-    /** The recorded width of the primary application window. */
-    private static double windowWidth;
-
-    /** The recorded height of the primary application window. */
-    private static double windowHeight;
 
 
     /**
