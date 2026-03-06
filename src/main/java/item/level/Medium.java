@@ -3,6 +3,7 @@ package item.level;
 import item.base.BasePuzzle;
 import item.usage.hasHint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,26 +37,20 @@ public class Medium extends BasePuzzle implements hasHint {
      */
     public Medium(String answer, List<String> pictureNames, List<String> hint) {
         super(answer);
-        this.pictureNames = pictureNames;
-        this.hint = hint;
+        this.pictureNames = new ArrayList<>();
+        for (String pictureName : pictureNames) {
+            setPictureName(pictureName);
+        }
+        setHint(hint);
     }
 
     /**
-     * Confirms that this difficulty level includes visual images for the player.
-     * @return True, as Medium puzzles always possess pictures.
-     */
-    @Override
-    public boolean getHasPicture() {
-        return true;
-    }
-
-    /**
-     * Placeholder method for setting a picture name.
-     * In the Medium level implementation, this method currently performs no action.
+     * Adds a picture name to the list of images for this puzzle.
      * @param pictureName The file name of the image.
      */
     @Override
     public void setPictureName(String pictureName) {
+        this.pictureNames.add(pictureName);
     }
 
     /**
@@ -82,15 +77,6 @@ public class Medium extends BasePuzzle implements hasHint {
      */
     public void setHint(List<String> hint) {
         this.hint = hint;
-    }
-
-    /**
-     * Indicates that this puzzle type supports the hint revelation system.
-     * @return True, as the Medium class implements the hasHint interface.
-     */
-    @Override
-    public boolean getHasHint() {
-        return true;
     }
 
     /**

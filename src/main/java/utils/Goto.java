@@ -44,15 +44,29 @@ public class Goto {
     /** The list of puzzles generated for the current game session. */
     private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
 
-    // --- Custom puzzles (in-memory) with ids so UI can remove them ---
+    /** The list of custom puzzles created during the session. */
     private static final ArrayList<CustomPuzzleEntry> customPuzzles = new ArrayList<>();
+
+    /** The identifier for the next custom puzzle to be added. */
     private static long nextCustomPuzzleId = 1;
 
+    /**
+     * A record of a custom puzzle entry including its unique ID, difficulty level, and puzzle instance.
+     */
     public static final class CustomPuzzleEntry {
+        /** The unique identifier of the custom puzzle entry. */
         public final long id;
+        /** The difficulty level associated with the custom puzzle. */
         public final GameMode difficulty;
+        /** The puzzle instance containing the answer and images. */
         public final BasePuzzle puzzle;
 
+        /**
+         * Constructs a new CustomPuzzleEntry.
+         * @param id The unique ID for this entry.
+         * @param difficulty The difficulty level of the puzzle.
+         * @param puzzle The puzzle instance.
+         */
         public CustomPuzzleEntry(long id, GameMode difficulty, BasePuzzle puzzle) {
             this.id = id;
             this.difficulty = difficulty;
@@ -60,10 +74,22 @@ public class Goto {
         }
     }
 
+    /**
+     * Retrieves the current list of custom puzzle entries.
+     * @return A list of all custom puzzle entries.
+     */
     public static List<CustomPuzzleEntry> getCustomPuzzles() {
         return new ArrayList<>(customPuzzles);
     }
 
+    /**
+     * Adds a new custom puzzle to the system.
+     * @param difficulty The difficulty level for the puzzle.
+     * @param answer The correct solution string.
+     * @param pictureNamesOrPaths A list of image resource names or filesystem paths.
+     * @param hints A list of hint strings (may be null for Easy mode).
+     * @return The unique ID of the newly created puzzle entry.
+     */
     public static long addCustomPuzzle(GameMode difficulty, String answer, List<String> pictureNamesOrPaths, List<String> hints) {
         Objects.requireNonNull(difficulty, "difficulty");
         Objects.requireNonNull(answer, "answer");
@@ -81,32 +107,20 @@ public class Goto {
         return id;
     }
 
+    /**
+     * Removes a custom puzzle entry by its unique identifier.
+     * @param id The ID of the puzzle to remove.
+     * @return True if a puzzle was removed, otherwise false.
+     */
     public static boolean removeCustomPuzzle(long id) {
         return customPuzzles.removeIf(p -> p.id == id);
     }
 
-    public static List<String> getCustomPuzzleDisplayList() {
-        ArrayList<String> rows = new ArrayList<>();
-        for (CustomPuzzleEntry e : customPuzzles) {
-            int imgCount = (e.puzzle.getPictureNames() == null) ? 0 : e.puzzle.getPictureNames().size();
-            rows.add("#" + e.id + " | " + e.difficulty + " | answer: " + e.puzzle.getAnswer() + " | images: " + imgCount);
-        }
-        return rows;
-    }
-
-    public static long parseCustomPuzzleIdFromDisplayRow(String row) {
-        if (row == null) return -1;
-        int hash = row.indexOf('#');
-        int space = row.indexOf(' ', hash);
-        if (hash < 0 || space < 0) return -1;
-        String idStr = row.substring(hash + 1, space).trim();
-        try {
-            return Long.parseLong(idStr);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
-
+    /**
+     * Retrieves custom puzzles filtered by the specified game mode.
+     * @param gameMode The game mode or difficulty string.
+     * @return A list of puzzles matching the criteria.
+     */
     private static List<BasePuzzle> getCustomPuzzlesForMode(String gameMode) {
         ArrayList<BasePuzzle> result = new ArrayList<>();
         for (CustomPuzzleEntry e : customPuzzles) {
@@ -396,7 +410,7 @@ public class Goto {
             checkQuiz(gameMode);
         });
 
-        if (playerA.getHp() <= 0 || playerB.getHp() <= 0) {
+        if (playerA.isDead() || playerB.isDead()) {
             resultPage(gameMode);
             playerA.setHp(3);
             playerB.setHp(3);
@@ -475,7 +489,7 @@ public class Goto {
             checkQuiz(gameMode);
         });
 
-        if (player.getHp() <= 0) {
+        if (player.isDead()) {
             resultPage(gameMode);
         }
     }
@@ -545,7 +559,7 @@ public class Goto {
             }
         }
         else{
-            if (player.getHp() > 0){
+            if (!player.isDead()){
                 winBgPath = "/you_win.png";
             }
             else{
@@ -565,6 +579,14 @@ public class Goto {
         rootPane.setBackground(new Background(bgImg));
 
         music(Objects.requireNonNull(Goto.class.getResource("/music/score_music.mp3")).toExternalForm());
+        
+        Platform.runLater(() -> {
+            Scene scene = rootPane.getScene();
+            if (scene != null && currentFilter != null) {
+                scene.removeEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, currentFilter);
+                currentFilter = null;
+            }
+        });
 
         rootPane.getChildren().add(new ResultPane(gameMode));
     }
@@ -578,6 +600,9 @@ public class Goto {
         rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
     }
 
+    /**
+     * Navigates to the custom puzzle management page.
+     */
     public static void customPuzzlePage() {
         clear();
         rootPane.getChildren().add(new CustomPuzzlePane());

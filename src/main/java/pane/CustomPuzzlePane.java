@@ -22,9 +22,22 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The CustomPuzzlePane class provides a user interface for managing and creating custom puzzles.
+ * It allows users to view a list of existing custom puzzles, remove them, and add new ones
+ * by selecting images, setting difficulty levels, and defining answers and hints.
+ */
 public class CustomPuzzlePane extends VBox {
+    /**
+     * A flag indicating if the back button has been clicked.
+     */
     private static Boolean backButtonClicked = false;
 
+    /**
+     * Constructs a new CustomPuzzlePane.
+     * Initializes the layout with specific spacing, alignment, and padding,
+     * and then displays the list of custom puzzles.
+     */
     public CustomPuzzlePane() {
         setSpacing(18);
         setAlignment(Pos.TOP_CENTER);
@@ -33,6 +46,11 @@ public class CustomPuzzlePane extends VBox {
         showListView();
     }
 
+    /**
+     * Displays the view containing the list of existing custom puzzles.
+     * This view includes a {@link javafx.scene.control.ListView} of puzzle entries,
+     * along with buttons to add a new puzzle or remove the selected one.
+     */
     private void showListView() {
         getChildren().clear();
 
@@ -76,10 +94,8 @@ public class CustomPuzzlePane extends VBox {
                         try {
                             Image img;
                             if (path.startsWith("/") || path.contains(":/") || path.contains(":\\")) {
-                                // Assume it's an absolute path if it looks like one
                                 img = new Image(new File(path).toURI().toString(), 80, 80, true, true);
                             } else {
-                                // Try resource
                                 img = new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/" + path)), 80, 80, true, true);
                             }
                             ImageView iv = new ImageView(img);
@@ -121,6 +137,11 @@ public class CustomPuzzlePane extends VBox {
         getChildren().addAll(title, customList, listButtons, createBackButton());
     }
 
+    /**
+     * Displays the view for adding a new custom puzzle.
+     * This view includes fields for selecting difficulty, entering the answer,
+     * choosing multiple images, and providing hints for those images.
+     */
     private void showAddView() {
         getChildren().clear();
 
@@ -164,20 +185,23 @@ public class CustomPuzzlePane extends VBox {
 
             List<File> files = chooser.showOpenMultipleDialog(getScene().getWindow());
             if (files != null) {
+                GameMode currentDifficulty = difficultyBox.getValue();
+                int required = switch (currentDifficulty) {
+                    case EASY -> 2;
+                    case MEDIUM -> 3;
+                    case HARD -> 4;
+                    default -> 0;
+                };
+
                 for (File f : files) {
+                    if (selectedImages.size() >= required) {
+                        statusLabel.setText("You can only add " + required + " images for " + currentDifficulty + " difficulty.");
+                        break;
+                    }
                     String path = f.getAbsolutePath();
-                    boolean exists = false;
-                    for (ImageHintBox box : selectedImages) {
-                        if (box.path.equals(path)) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (!exists) {
-                        ImageHintBox box = new ImageHintBox(path);
-                        selectedImages.add(box);
-                        addImageToGallery(imageGallery, selectedImages, box);
-                    }
+                    ImageHintBox box = new ImageHintBox(path);
+                    selectedImages.add(box);
+                    addImageToGallery(imageGallery, selectedImages, box);
                 }
             }
         });
@@ -191,8 +215,15 @@ public class CustomPuzzlePane extends VBox {
                 statusLabel.setText("Please enter an answer.");
                 return;
             }
-            if (selectedImages.isEmpty()) {
-                statusLabel.setText("Please choose at least 1 image.");
+            int requiredImages = switch (difficulty) {
+                case EASY -> 2;
+                case MEDIUM -> 3;
+                case HARD -> 4;
+                default -> 0;
+            };
+
+            if (selectedImages.size() != requiredImages) {
+                statusLabel.setText("Please choose exactly " + requiredImages + " images for " + difficulty + " difficulty.");
                 return;
             }
 
@@ -224,6 +255,12 @@ public class CustomPuzzlePane extends VBox {
         HBox actionButtons = new HBox(20, saveButton, cancelButton);
         actionButtons.setAlignment(Pos.CENTER);
 
+        difficultyBox.setOnAction(e -> {
+            selectedImages.clear();
+            imageGallery.getChildren().clear();
+            statusLabel.setText("");
+        });
+
         VBox form = new VBox(15);
         form.setAlignment(Pos.CENTER_LEFT);
         form.setMaxWidth(760);
@@ -243,6 +280,14 @@ public class CustomPuzzlePane extends VBox {
         getChildren().addAll(title, form);
     }
 
+    /**
+     * Adds an image and its corresponding hint field to the image gallery display.
+     * It also sets up a click listener on the image to allow its removal from the gallery.
+     *
+     * @param gallery the {@link javafx.scene.layout.FlowPane} where the image preview is displayed
+     * @param items   the list of {@link ImageHintBox} objects tracking selected images
+     * @param box     the {@link ImageHintBox} containing the image path and hint field to be added
+     */
     private void addImageToGallery(FlowPane gallery, ObservableList<ImageHintBox> items, ImageHintBox box) {
         try {
             Image img = new Image(new File(box.path).toURI().toString(), 100, 100, true, true);
@@ -251,17 +296,12 @@ public class CustomPuzzlePane extends VBox {
             
             Tooltip.install(iv, new Tooltip("Click to remove image"));
 
+            VBox container = new VBox(5);
             iv.setOnMouseClicked(e -> {
                 items.remove(box);
-                gallery.getChildren().removeIf(node -> {
-                    if (node instanceof VBox vb) {
-                         return vb.getUserData() != null && vb.getUserData().equals(box.path);
-                    }
-                    return false;
-                });
+                gallery.getChildren().remove(container);
             });
 
-            VBox container = new VBox(5);
             container.setAlignment(Pos.CENTER);
             container.getChildren().addAll(iv, box.hintField);
             container.setUserData(box.path);
@@ -273,10 +313,24 @@ public class CustomPuzzlePane extends VBox {
         }
     }
 
+    /**
+     * Represents a container for a selected puzzle image and its associated hint field.
+     */
     private static class ImageHintBox {
+        /**
+         * The absolute path to the selected image file.
+         */
         String path;
+        /**
+         * The text field for entering a hint for this image.
+         */
         TextField hintField;
 
+        /**
+         * Constructs an ImageHintBox with the specified image path.
+         *
+         * @param path the file path of the image
+         */
         ImageHintBox(String path) {
             this.path = path;
             this.hintField = new TextField();
@@ -285,6 +339,13 @@ public class CustomPuzzlePane extends VBox {
         }
     }
 
+    /**
+     * Creates a labeled control wrapped in a VBox.
+     *
+     * @param labelText the text to display as a label
+     * @param control   the control to be labeled
+     * @return a {@link javafx.scene.layout.VBox} containing the label and the control
+     */
     private static VBox labeled(String labelText, Control control) {
         Label label = new Label(labelText);
         label.setTextFill(Color.WHITE);
@@ -295,10 +356,22 @@ public class CustomPuzzlePane extends VBox {
         return box;
     }
 
+    /**
+     * Safely trims a string, returning an empty string if the input is null.
+     *
+     * @param s the string to trim
+     * @return the trimmed string, or an empty string if input was null
+     */
     private static String safeTrim(String s) {
         return s == null ? "" : s.trim();
     }
 
+    /**
+     * Applies a custom graphical style to a button, including background images,
+     * hover effects, and font settings.
+     *
+     * @param button the {@link javafx.scene.control.Button} to style
+     */
     private void styleButton(Button button) {
         button.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(Goto.class.getResourceAsStream("/choiceback.png"))),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -323,6 +396,11 @@ public class CustomPuzzlePane extends VBox {
         button.setPrefHeight(80);
     }
 
+    /**
+     * Creates a "Back" button that returns the user to the title screen.
+     *
+     * @return a styled {@link javafx.scene.control.Button} for navigating back
+     */
     private Button createBackButton() {
         Button back = new Button("Back");
         styleButton(back);
@@ -336,10 +414,20 @@ public class CustomPuzzlePane extends VBox {
         return back;
     }
 
+    /**
+     * Gets the current state of the back button click flag.
+     *
+     * @return true if the back button was clicked, false otherwise
+     */
     public static Boolean getBackButtonClicked() {
         return backButtonClicked;
     }
 
+    /**
+     * Sets the state of the back button click flag.
+     *
+     * @param backButtonClicked the new state of the flag
+     */
     public static void setBackButtonClicked(Boolean backButtonClicked) {
         CustomPuzzlePane.backButtonClicked = backButtonClicked;
     }

@@ -32,12 +32,6 @@ public abstract class BasePuzzle {
     }
 
     /**
-     * Indicates whether the current puzzle includes visual images as part of its content.
-     * @return True if the puzzle has pictures, otherwise false.
-     */
-    public abstract boolean getHasPicture();
-
-    /**
      * Assigns a specific picture file name to the puzzle's collection.
      * @param pictureName The file name of the image to be added or set.
      */

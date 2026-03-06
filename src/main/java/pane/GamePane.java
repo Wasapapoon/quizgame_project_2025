@@ -89,7 +89,6 @@ public class GamePane extends GridPane {
     private static Image loadImageFromResourceOrFile(String fileNameOrPath) {
         if (fileNameOrPath == null || fileNameOrPath.isBlank()) return null;
 
-        // 1) Try resource (existing puzzles)
         try (InputStream resource = Goto.class.getResourceAsStream("/" + fileNameOrPath)) {
             if (resource != null) {
                 return new Image(resource);
@@ -97,7 +96,6 @@ public class GamePane extends GridPane {
         } catch (Exception ignored) {
         }
 
-        // 2) Try filesystem path (FileChooser-selected custom puzzles)
         try {
             File f = new File(fileNameOrPath);
             if (f.exists() && f.isFile()) {
