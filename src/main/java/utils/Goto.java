@@ -27,12 +27,21 @@ import java.util.Objects;
 import mode.GameModeSelector;
 import javafx.stage.Stage;
 
+/**
+ * The Goto class serves as the primary utility and navigation controller for the application.
+ * It manages global states, including player data, game timers, background music,
+ * and handles transitions between different UI panes such as the title screen, quiz pages, and result screens.
+ */
 public class Goto {
 
+
+    /** The root container used to swap different game screens. */
     private static RootPane rootPane;
 
+    /** The media player instance used for playing background music and sound effects. */
     private static MediaPlayer mediaPlayer;
 
+    /** The list of puzzles generated for the current game session. */
     private static final ArrayList<BasePuzzle> questions = new ArrayList<>();
 
     // --- Custom puzzles (in-memory) with ids so UI can remove them ---
@@ -110,26 +119,43 @@ public class Goto {
         return result;
     }
 
+    /** The player instance for single-player modes (Easy, Medium, Hard). */
     public static Player player = new Player("HP LEFT");
 
+    /** Player A instance used for the competitive Battle mode. */
     public static Player playerA = new Player("PLAYER A");
 
+    /** Player B instance used for the competitive Battle mode. */
     public static Player playerB = new Player("PLAYER B");
 
+    /** The shared digital timer used to track remaining time during puzzles. */
     public static DigitalTimer gameTimer = new DigitalTimer();
 
+    /** The current key event filter used to handle specific key inputs (e.g., Buzz-in keys). */
     private static EventHandler<KeyEvent> currentFilter;
 
-    private static double windowWidth ;
+    /** The recorded width of the primary application window. */
+    private static double windowWidth;
 
-    private static double windowHeight ;
+    /** The recorded height of the primary application window. */
+    private static double windowHeight;
 
+
+    /**
+     * Initializes and records the current window dimensions from the provided RootPane.
+     * @param root The RootPane instance from which to extract window size.
+     */
     public static void initializeWindowSize(RootPane root) {
         rootPane = root;
         setWindowWidth(rootPane.getScene().getWindow().getWidth());
         setWindowHeight(rootPane.getScene().getWindow().getHeight());
     }
 
+
+    /**
+     * Initializes the media player with a specific music URL.
+     * @param musicUrl The resource path or URL of the music file.
+     */
     public static void setMediaPlayer(String musicUrl) {
         try {
             Media media = new Media(musicUrl);
@@ -139,14 +165,27 @@ public class Goto {
         }
     }
 
+    /**
+     * Sets the global reference for the RootPane container.
+     * @param rootPane The RootPane instance to be used globally.
+     */
     public static void setRootPane(RootPane rootPane) {
         Goto.rootPane = rootPane;
     }
 
+
+    /**
+     * Retrieves the global RootPane instance.
+     * @return The current RootPane.
+     */
     public static RootPane getRootPane() {
         return rootPane;
     }
 
+    /**
+     * Stops current playback and starts playing background music from the specified path in an infinite loop.
+     * @param musicPath The resource path for the music file.
+     */
     private static void music(String musicPath){
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -158,12 +197,18 @@ public class Goto {
         mediaPlayer.play();
     }
 
+    /**
+     * Clears all UI components from the RootPane except for the primary background layer.
+     */
     public static void clear(){
         if(rootPane.getChildren().size() > 1){
             rootPane.getChildren().remove(1,rootPane.getChildren().size());
         }
     }
 
+    /**
+     * Navigates to the title screen and starts the title background music.
+     */
     public static void titleScreenPage(){
         clear();
         if (!ModeSelectionPane.getBackButtonClicked() && !CustomPuzzlePane.getBackButtonClicked()) {
@@ -172,6 +217,11 @@ public class Goto {
         rootPane.getChildren().add(new TitleScreenPane());
     }
 
+    /**
+     * Initializes the quiz data based on the selected game mode.
+     * This method resets player health, populates the question list, and shuffles the puzzles.
+     * @param gameMode The difficulty or mode string (EASY, MEDIUM, HARD, BATTLE).
+     */
     public static void initQuiz(String gameMode) {
         if (gameMode.equals("BATTLE")) {
             music(Objects.requireNonNull(Goto.class.getResource("/music/extreme_quiz.mp3")).toExternalForm());
@@ -198,9 +248,9 @@ public class Goto {
                 EasyLevel.add(new Easy( "มายคราฟ", List.of("easy4_1.png", "easy4_2.png")));
 
                 EasyLevel.addAll(getCustomPuzzlesForMode(gameMode));
-               Collections.shuffle(EasyLevel);
-               questions.addAll(EasyLevel);
-               singlePlayerPage(gameMode);
+                Collections.shuffle(EasyLevel);
+                questions.addAll(EasyLevel);
+                singlePlayerPage(gameMode);
             }
             case "MEDIUM" -> {
                 MediumLevel.add(new Medium( "ชีวิตคู่", List.of("medium1_1.jpg", "medium1_2.png", "medium1_3.jpg"),List.of("ชูมือ","วิดพื้น","จำนวนคี่")));
@@ -239,6 +289,11 @@ public class Goto {
         }
     }
 
+    /**
+     * Constructs and displays the multi-player Battle mode quiz page.
+     * Sets up buzz-in event filters and manages health deduction for both players.
+     * @param gameMode The string representing the BATTLE mode.
+     */
     public static void quizPage(String gameMode) {
         clear();
 
@@ -348,6 +403,10 @@ public class Goto {
 
     }
 
+    /**
+     * Constructs and displays the single-player quiz page for Easy, Medium, or Hard levels.
+     * @param gameMode The selected difficulty level string.
+     */
     public static void singlePlayerPage(String gameMode) {
         clear();
 
@@ -403,7 +462,16 @@ public class Goto {
         }
     }
 
-
+    /**
+     * Validates the player's answer against the current puzzle's solution.
+     * In Battle mode, a correct answer will deduct health from the opponent.
+     * @param choice The answer string entered by the player.
+     * @param gameMode The current game mode.
+     * @param currentPlayer The player who submitted the answer.
+     * @param opponentPlayer The opposing player.
+     * @param opponentLifePane The life pane of the opponent to be updated.
+     * @return True if the answer is correct, otherwise false.
+     */
     public static Boolean checkAnswer(String choice, String gameMode, Player currentPlayer, Player opponentPlayer, LifePane opponentLifePane) {
         Boolean isCorrect = choice.equals(questions.getFirst().getAnswer());
 
@@ -416,7 +484,10 @@ public class Goto {
         return isCorrect;
     }
 
-
+    /**
+     * Checks the remaining questions and navigates to the next question or the results page.
+     * @param gameMode The current game mode.
+     */
     public static void checkQuiz(String gameMode) {
         clear();
 
@@ -437,7 +508,10 @@ public class Goto {
         }
     }
 
-
+    /**
+     * Displays the final result page with unique backgrounds for Win, Loss, or Draw states.
+     * @param gameMode The game mode that was just completed.
+     */
     public static void resultPage(String gameMode) {
         clear();
 
@@ -480,6 +554,10 @@ public class Goto {
         rootPane.getChildren().add(new ResultPane(gameMode));
     }
 
+    /**
+     * Displays the level selection screen using the provided selector logic.
+     * @param gameModeSelector The selector instance managing mode states.
+     */
     public static void levelSelectionPage(GameModeSelector gameModeSelector) {
         clear();
         rootPane.getChildren().add(new ModeSelectionPane(gameModeSelector));
@@ -489,9 +567,23 @@ public class Goto {
         clear();
         rootPane.getChildren().add(new CustomPuzzlePane());
     }
+    /** @return The current window width. */
+	public static double getWindowWidth() {
+		return windowWidth;
+	}
 
-    public static double getWindowWidth() { return windowWidth; }
-    public static void setWindowWidth(double windowWidth) { Goto.windowWidth = windowWidth; }
-    public static double getWindowHeight() { return windowHeight; }
-    public static void setWindowHeight(double windowHeight) { Goto.windowHeight = windowHeight; }
+    /** @param windowWidth The width to set. */
+	public static void setWindowWidth(double windowWidth) {
+		Goto.windowWidth = windowWidth;
+	}
+
+    /** @return The current window height. */
+	public static double getWindowHeight() {
+		return windowHeight;
+	}
+
+    /** @param windowHeight The height to set. */
+	public static void setWindowHeight(double windowHeight) {
+		Goto.windowHeight = windowHeight;
+	}
 }

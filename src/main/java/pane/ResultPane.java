@@ -14,9 +14,21 @@ import java.util.Objects;
 
 import static utils.Goto.*;
 
+/**
+ * ResultPane is a UI component that displays the game over screen or final results.
+ * It provides options for players to either restart the game in the current mode
+ * or return to the title screen.
+ */
 public class ResultPane extends VBox {
+
+    /** The specific game difficulty or mode that was just played (e.g., EASY, MEDIUM, BATTLE). */
     private String gameMode;
-    
+
+    /**
+     * Constructs the ResultPane with a specific background and navigation buttons.
+     * It initializes the layout to show "Try Again" and "Return" options.
+     * @param gameMode The mode the player was in, used to restart the session correctly.
+     */
     public ResultPane(String gameMode) {
         this.gameMode = gameMode;
         initializeWindowSize(getRootPane());

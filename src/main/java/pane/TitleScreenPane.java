@@ -15,11 +15,31 @@ import utils.Goto;
 
 import java.util.Objects;
 
-public class TitleScreenPane extends VBox { 
+/**
+ * The TitleScreenPane class represents the initial landing page of the game.
+ * It serves as the main menu, displaying the game logo and providing options
+ * to either start the game by navigating to the mode selection or exit the application.
+ */
+public class TitleScreenPane extends VBox {
+
+    /**
+     * The button used to initiate the transition to the game level selection screen.
+     */
     private Button playButton;
     private Button customPuzzleButton;
+
+    /**
+     * The selector object responsible for managing and passing game mode configurations
+     * throughout the application.
+     */
     private GameModeSelector gameModeSelector;
 
+    /**
+     * Constructs the TitleScreenPane, initializing the main menu's layout and components.
+     * This includes setting up the game logo image, the "Play" button with hover effects,
+     * and the "Exit" button to close the application.
+     * It also initializes a new {@link mode.GameModeSelector} instance for the session.
+     */
     public TitleScreenPane() {
         setAlignment(Pos.CENTER);
         gameModeSelector = new GameModeSelector();

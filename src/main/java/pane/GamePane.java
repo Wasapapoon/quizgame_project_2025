@@ -19,10 +19,25 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The GamePane class is responsible for displaying the puzzle images and their
+ * associated hints during a gameplay session. It dynamically arranges the UI
+ * components and manages the visibility of textual hints based on the remaining time.
+ */
 public class GamePane extends GridPane {
 
+    /**
+     * A list of Text objects representing the hints displayed beneath each puzzle image.
+     */
     private List<Text> hintTextList = new ArrayList<>();
 
+    /**
+     * Constructs a GamePane to visualize a specific puzzle and its images.
+     * It initializes the layout, loads images from resources, and prepares
+     * hidden hint labels if the puzzle supports a hint system.
+     * @param question The current puzzle object containing image names and potential hints.
+     * @param gameMode The current difficulty or competition mode being played.
+     */
     public GamePane(BasePuzzle question, String gameMode) {
 
         Goto.initializeWindowSize(Goto.getRootPane());
@@ -94,6 +109,14 @@ public class GamePane extends GridPane {
         return null;
     }
 
+    /**
+     * Updates the visibility of puzzle hints based on the current countdown time.
+     * It triggers hint revelations at specific time intervals depending on the
+     * number of hints available for the current puzzle.
+     * @param currentTime The current value of the game timer in seconds.
+     * @param question The current puzzle object being solved.
+     * @param gameMode The current mode of the game, used to determine revelation logic.
+     */
     public void updateHintsByTime(int currentTime, BasePuzzle question, String gameMode) {
         if (!(question instanceof hasHint) || hintTextList.isEmpty()) return;
 
